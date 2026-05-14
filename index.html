@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2487.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="zh-TW"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;羽庭的皮克敏地圖🗺️&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>:root { --bg-color: #9fb5c3; --shadow-dark: #7a8b96; --shadow-light: #c4dfef; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body { margin: 0; padding: 20px; font-family: sans-serif; background-color: var(--bg-color); color: #3d4a52; display: flex; flex-direction: column; align-items: center; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.countdown { margin: 20px; padding: 15px; border-radius: 20px; background: rgba(255, 255, 255, 0.2); color: white; font-weight: bold; box-shadow: inset 4px 4px 10px rgba(0,0,0,0.1); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card { background: var(--bg-color); border-radius: 30px; padding: 20px; margin: 20px 0; width: 90%; max-width: 400px; box-shadow: 10px 10px 20px var(--shadow-dark), -10px -10px 20px var(--shadow-light); border: 1px solid rgba(255,255,255,0.2); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.map-link { display: inline-block; background: white; color: #7a8b96; padding: 10px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; margin-top: 10px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);"&gt;羽庭的皮克敏地圖🗺️&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="countdown" id="timer"&gt;計算中...&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;📍 Paris-h 麵包店&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;🕒 5/20 09:00&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;💡 帶回台灣的麵包不要買到肉喔🥖&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a href="https://maps.app.goo.gl/i4eM3zrJAVFyTwEK8" target="_blank" class="map-link"&gt;點我看地圖 👋&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateTimer() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const target = new Date('May 20, 2026 09:00:00').getTime();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const now = new Date().getTime();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const diff = target - now;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (diff &lt; 0) { document.getElementById('timer').innerHTML = "旅程開始囉！✨"; return; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const d = Math.floor(diff / 86400000);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const h = Math.floor((diff % 86400000) / 3600000);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const m = Math.floor((diff % 3600000) / 60000);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const s = Math.floor((diff % 60000) / 1000);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('timer').innerHTML = `距離 5/20 還有：${d}天 ${h}時 ${m}分 ${s}秒`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>setInterval(updateTimer, 1000); updateTimer();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
