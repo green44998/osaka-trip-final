@@ -6,23 +6,44 @@
     <title>羽庭的皮克敏地圖🗺️</title>
     <style>
         :root { --bg-color: #9fb5c3; --shadow-dark: #7a8b96; --shadow-light: #c4dfef; }
-        body { margin: 0; padding: 20px; font-family: sans-serif; background-color: var(--bg-color); color: #3d4a52; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .countdown { margin: 20px; padding: 15px; border-radius: 20px; background: rgba(255, 255, 255, 0.2); color: white; font-weight: bold; box-shadow: inset 4px 4px 10px rgba(0,0,0,0.1); text-align: center; }
-        .card { background: var(--bg-color); border-radius: 30px; padding: 25px; margin: 20px 0; width: 90%; max-width: 400px; box-shadow: 12px 12px 24px var(--shadow-dark), -12px -12px 24px var(--shadow-light); border: 1px solid rgba(255,255,255,0.2); }
-        .map-link { display: inline-block; background: white; color: #7a8b96; padding: 12px 24px; border-radius: 25px; text-decoration: none; font-weight: bold; margin-top: 15px; box-shadow: 4px 4px 10px rgba(0,0,0,0.1); }
+        body { margin: 0; padding: 20px; font-family: -apple-system, "Helvetica Neue", sans-serif; background-color: var(--bg-color); color: #3d4a52; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .countdown { margin: 20px; padding: 20px; border-radius: 25px; background: rgba(255, 255, 255, 0.25); color: white; font-weight: bold; box-shadow: inset 4px 4px 10px rgba(0,0,0,0.1); text-align: center; width: 80%; max-width: 350px; }
+        .card { background: var(--bg-color); border-radius: 30px; padding: 25px; margin: 15px 0; width: 90%; max-width: 400px; box-shadow: 12px 12px 24px var(--shadow-dark), -12px -12px 24px var(--shadow-light); border: 1px solid rgba(255,255,255,0.2); transition: transform 0.2s; }
+        .card:active { transform: scale(0.98); }
+        h3 { color: white; margin: 0 0 10px 0; font-size: 1.2rem; }
+        .time { color: rgba(255,255,255,0.9); font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block; }
+        .note { background: rgba(255,255,255,0.15); padding: 12px; border-radius: 15px; color: white; font-size: 14px; line-height: 1.5; margin-bottom: 15px; }
+        .map-link { display: inline-block; background: white; color: #7a8b96; padding: 12px 24px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 14px; box-shadow: 4px 4px 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
     <h1 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); margin-top: 30px;">羽庭的皮克敏地圖🗺️</h1>
-    <div class="countdown" id="timer">載入冒險時間...</div>
+    
+    <!-- 倒數計時器 -->
+    <div class="countdown" id="timer">準備出發...</div>
 
+    <!-- 行程點 1 -->
     <div class="card">
-        <h3 style="color: white; margin-top: 0;">📍 Paris-h 麵包店</h3>
-        <p style="color: rgba(255,255,255,0.9); font-weight: bold;">🕒 5/20 09:00</p>
-        <div style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 15px; color: white; font-size: 14px;">
-            💡 帶回台灣的麵包不要買到肉喔🥖
-        </div>
-        <a href="https://maps.app.goo.gl/i4eM3zrJAVFyTwEK8" target="_blank" class="map-link">點我看地圖 👋</a>
+        <h3>📍 Borden Coffee</h3>
+        <span class="time">🕒 5/20 第一站</span>
+        <div class="note">💡 這是妳最想去的咖啡廳，記得拍美照！☕️</div>
+        <a href="https://maps.app.goo.gl/xxx" target="_blank" class="map-link">Google Maps 導航 👋</a>
+    </div>
+
+    <!-- 行程點 2 -->
+    <div class="card">
+        <h3>📍 Paris-h 麵包店</h3>
+        <span class="time">🕒 5/20 09:00</span>
+        <div class="note">💡 提醒羽庭：帶回台灣的麵包不要買到含有肉類的成分喔🥖</div>
+        <a href="https://maps.app.goo.gl/i4eM3zrJAVFyTwEK8" target="_blank" class="map-link">地圖傳送門 👋</a>
+    </div>
+
+    <!-- 行程點 3 (妳可以在這裡繼續增加) -->
+    <div class="card">
+        <h3>📍 下一個神秘地點</h3>
+        <span class="time">🕒 隨時出發</span>
+        <div class="note">💡 建議用 AI 翻譯菜單，溝通超方便</div>
+        <a href="#" class="map-link">地圖點我 👋</a>
     </div>
 
     <script>
@@ -30,12 +51,12 @@
             const target = new Date('May 20, 2026 09:00:00').getTime();
             const now = new Date().getTime();
             const diff = target - now;
-            if (diff < 0) { document.getElementById('timer').innerHTML = "旅程正式開始！✨"; return; }
+            if (diff < 0) { document.getElementById('timer').innerHTML = "大阪之旅進行中！🇯🇵"; return; }
             const d = Math.floor(diff / 86400000);
             const h = Math.floor((diff % 86400000) / 3600000);
             const m = Math.floor((diff % 3600000) / 60000);
             const s = Math.floor((diff % 60000) / 1000);
-            document.getElementById('timer').innerHTML = `距離 5/20 還有：${d}天 ${h}時 ${m}分 ${s}秒`;
+            document.getElementById('timer').innerHTML = `距離出發：${d}天 ${h}時 ${m}分 ${s}秒`;
         }
         setInterval(updateTimer, 1000); updateTimer();
     </script>
