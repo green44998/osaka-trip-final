@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自己旅行隨身誌🚗</title>
+    <style>
+        :root { 
+            --bg-color: #fdf6ec;      /* 陽光暖奶油色 */
+            --shadow-dark: #e0d5c1; 
+            --shadow-light: #ffffff; 
+        }
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            font-family: -apple-system, sans-serif; 
+            background-color: var(--bg-color); 
+            color: #5d4037; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+        .countdown { 
+            margin: 20px; 
+            padding: 20px; 
+            border-radius: 25px; 
+            background: rgba(255, 159, 67, 0.15); 
+            color: #d35400; 
+            font-weight: bold; 
+            text-align: center; 
+            width: 80%; 
+            max-width: 350px; 
+        }
+        .card { 
+            background: white; 
+            border-radius: 30px; 
+            padding: 25px; 
+            margin: 15px 0; 
+            width: 90%; 
+            max-width: 400px; 
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light); 
+            border: 1px solid #fff3e0; 
+        }
+        h3 { color: #e67e22; margin: 0 0 10px 0; }
+        .time { color: #e15f41; font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block; }
+        .note { background: #fff9db; padding: 12px; border-radius: 15px; color: #7d5a00; font-size: 14px; line-height: 1.5; margin-bottom: 15px; border-left: 4px solid #f1c40f; }
+        .map-link { display: inline-block; background: #ff9f43; color: white; padding: 12px 24px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .back-btn { margin-top: 30px; color: #7a8b96; text-decoration: none; font-size: 14px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1 style="color: #e67e22; margin-top: 30px;">自駕自由行隨身誌🚗</h1>
+    
+    <div class="countdown" id="timer">準備出發...</div>
+
+    <div class="card">
+        <h3>📍 Borden Coffee</h3>
+        <span class="time">🕒 第一站快閃</span>
+        <div class="note">💡 這是妳最想去的咖啡廳，記得拍美照！☕️</div>
+        <a href="https://maps.google.com/?q=Borden+Coffee+Osaka" target="_blank" class="map-link">Google Maps 導航 👋</a>
+    </div>
+
+    <div class="card">
+        <h3>📍 Paris-h 麵包店</h3>
+        <span class="time">🕒 09:00 準時報到</span>
+        <div class="note">💡 提醒羽庭：帶回台灣的麵包不要買到含有肉類的成分喔🥖</div>
+        <a href="https://maps.google.com/?q=Paris-h+Osaka" target="_blank" class="map-link">地圖傳送門 👋</a>
+    </div>
+
+    <a href="index.html" class="back-btn">⬅️ 返回冒險選擇支</a>
+
+    <script>
+        function updateTimer() {
+            const target = new Date('May 20, 2026 09:00:00').getTime();
+            const now = new Date().getTime();
+            const diff = target - now;
+            if (diff < 0) { document.getElementById('timer').innerHTML = "大阪之旅進行中！🇯🇵"; return; }
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            document.getElementById('timer').innerHTML = `距離出發：${d}天 ${h}時 ${m}分 ${s}秒`;
+        }
+        setInterval(updateTimer, 1000); updateTimer();
+    </script>
+</body>
+</html>
