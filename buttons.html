@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>羽婷的大阪冒險地圖🗺️</title>
+    <title>羽庭的大阪冒險地圖🗺️</title>
     <style>
         :root { 
             --bg-color: #9fb5c3; 
@@ -75,17 +75,17 @@
     </style>
 </head>
 <body>
-    <h1 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); margin-top: 30px; letter-spacing: 2px;">冒險選擇支線🗺️</h1>
+    <h1 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); margin-top: 30px; letter-spacing: 2px;">冒險選擇支🗺️</h1>
     
     <div class="countdown" id="timer">準備出發...</div>
 
     <div class="button-container">
         
-        <a href="https://maps.google.com/?q=Borden+Coffee+Osaka" target="_blank" class="nav-btn">
+        <a href="index.html" class="nav-btn">
             <span class="emoji">🚗</span>自己自由行（自駕地圖）
         </a>
 
-        <a href="https://maps.google.com/?q=Katsuoji+Temple+Osaka" target="_blank" class="nav-btn">
+        <a href="https://www.google.com/maps/search/?api=1&query=勝尾寺" target="_blank" class="nav-btn">
             <span class="emoji">👹</span>必勝運勢！勝尾寺導航
         </a>
 
@@ -93,7 +93,6 @@
 
     <script>
         function updateTimer() {
-            // 自動幫妳倒數到 5/20
             const target = new Date('May 20, 2026 09:00:00').getTime();
             const now = new Date().getTime();
             const diff = target - now;
@@ -102,7 +101,7 @@
             const h = Math.floor((diff % 86400000) / 3600000);
             const m = Math.floor((diff % 3600000) / 60000);
             const s = Math.floor((diff % 60000) / 1000);
-            document.getElementById('timer').innerHTML = `距離 5/20 還有：${d}天 ${h}時 ${m}分 ${s}秒`;
+            document.getElementById('timer').innerHTML = `距離出發還有：${d}天 ${h}時 ${m}分 ${s}秒`;
         }
         setInterval(updateTimer, 1000); updateTimer();
     </script>
