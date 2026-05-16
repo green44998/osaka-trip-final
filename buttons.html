@@ -5,19 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>羽婷的大阪冒險地圖🗺️</title>
     <style>
-        /* 陽光明媚的專屬配色 */
         :root { 
-            --bg-color: #fdf6ec;      /* 溫暖明亮的奶油日光色 */
-            --btn-color: #ff9f43;     /* 陽光溫暖橙 */
-            --shadow-dark: #e0d5c1;   /* 溫柔的深色陰影 */
-            --shadow-light: #ffffff;  /* 亮部反光 */
+            --bg-color: #fdf6ec;      
+            --btn-color: #ff9f43;     
+            --shadow-dark: #e0d5c1;   
+            --shadow-light: #ffffff;  
         }
         body { 
             margin: 0; 
             padding: 20px; 
             font-family: -apple-system, "Helvetica Neue", sans-serif; 
             background-color: var(--bg-color); 
-            color: #5d4037;           /* 溫暖的深咖啡色字體 */
+            color: #5d4037;           
             display: flex; 
             flex-direction: column; 
             align-items: center; 
@@ -27,7 +26,7 @@
             margin: 20px; 
             padding: 15px; 
             border-radius: 20px; 
-            background: rgba(255, 159, 67, 0.15); /* 輕透的橙色倒數框 */
+            background: rgba(255, 159, 67, 0.15); 
             color: #d35400; 
             font-weight: bold; 
             box-shadow: inset 3px 3px 8px rgba(0,0,0,0.05); 
@@ -42,11 +41,10 @@
             margin-top: 20px;
         }
 
-        /* 陽光立體按鈕樣式 */
         .nav-btn {
             display: block;
-            background: white;        /* 乾淨的主按鈕 */
-            color: #d35400;           /* 陽光橙字體 */
+            background: white;        
+            color: #d35400;           
             text-decoration: none;
             font-weight: 900;
             font-size: 18px;
@@ -62,7 +60,6 @@
             transition: all 0.1s ease;
         }
 
-        /* 壓下去的真實按鈕彈放效果 */
         .nav-btn:active {
             transform: scale(0.96);
             box-shadow: inset 4px 4px 10px var(--shadow-dark);
@@ -86,117 +83,7 @@
             <span class="emoji">🚗</span>自己自由行（自駕地圖）
         </a>
 
-      <a href="katsuo-ji.html" class="nav-btn">
-    <span class="emoji">👹</span>必勝運勢！勝尾寺
-</a>
-
-
-    </div>
-
-    <script>
-        function updateTimer() {
-            const target = new Date('May 20, 2026 09:00:00').getTime();
-            const now = new Date().getTime();
-            const diff = target - now;
-            if (diff < 0) { document.getElementById('timer').innerHTML = "旅程正式開始！🇯🇵"; return; }
-            const d = Math.floor(diff / 86400000);
-            const h = Math.floor((diff % 86400000) / 3600000);
-            const m = Math.floor((diff % 3600000) / 60000);
-            const s = Math.floor((diff % 60000) / 1000);
-            document.getElementById('timer').innerHTML = `距離出發還有：${d}天 ${h}時 ${m}分 ${s}秒`;
-        }
-        setInterval(updateTimer, 1000); updateTimer();
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>羽庭的大阪冒險地圖🗺️</title>
-    <style>
-        :root { 
-            --bg-color: #9fb5c3; 
-            --shadow-dark: #7a8b96; 
-            --shadow-light: #c4dfef; 
-        }
-        body { 
-            margin: 0; 
-            padding: 20px; 
-            font-family: -apple-system, "Helvetica Neue", sans-serif; 
-            background-color: var(--bg-color); 
-            color: #3d4a52; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-height: 100vh; 
-        }
-        .countdown { 
-            margin: 20px; 
-            padding: 15px; 
-            border-radius: 20px; 
-            background: rgba(255, 255, 255, 0.25); 
-            color: white; 
-            font-weight: bold; 
-            box-shadow: inset 4px 4px 10px rgba(0,0,0,0.1); 
-            text-align: center; 
-            width: 85%; 
-            max-width: 380px; 
-        }
-        
-        .button-container {
-            width: 90%;
-            max-width: 400px;
-            margin-top: 20px;
-        }
-
-        /* 擬真立體按鈕樣式 */
-        .nav-btn {
-            display: block;
-            background: var(--bg-color);
-            color: white;
-            text-decoration: none;
-            font-weight: 900;
-            font-size: 18px;
-            padding: 22px;
-            margin: 25px 0;
-            border-radius: 25px;
-            text-align: center;
-            letter-spacing: 1px;
-            box-shadow: 10px 10px 20px var(--shadow-dark), 
-                        -10px -10px 20px var(--shadow-light);
-            border: 1px solid rgba(255,255,255,0.2);
-            cursor: pointer;
-            transition: all 0.1s ease;
-        }
-
-        /* 壓下去的真實按鈕彈放效果 */
-        .nav-btn:active {
-            transform: scale(0.96);
-            box-shadow: inset 6px 6px 12px var(--shadow-dark), 
-                        inset -6px -6px 12px var(--shadow-light);
-        }
-
-        .emoji {
-            font-size: 22px;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-    </style>
-</head>
-<body>
-    <h1 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); margin-top: 30px; letter-spacing: 2px;">冒險選擇支🗺️</h1>
-    
-    <div class="countdown" id="timer">準備出發...</div>
-
-    <div class="button-container">
-        
-        <a href="index.html" class="nav-btn">
-            <span class="emoji">🚗</span>自己自由行（自駕地圖）
-        </a>
-
-        <a href="https://www.google.com/maps/search/?api=1&query=勝尾寺" target="_blank" class="nav-btn">
+        <a href="katsuo-ji.html" class="nav-btn" style="color: #c0392b; border-color: #fce4d6;">
             <span class="emoji">👹</span>必勝運勢！勝尾寺導航
         </a>
 
