@@ -3,346 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>羽婷的皮克敏地圖🗺️</title>
+    <title>羽婷的大阪冒險地圖🗺️</title>
     <style>
-        :root {
-            --bg-color: #9fb5c3;
-            --shadow-dark: #7a8b96;
-            --shadow-light: #c4dfef;
-            --accent-white: rgba(255, 255, 255, 0.4);
+        :root { 
+            --bg-color: #fdf6ec;      /* 陽光暖奶油色背景 */
+            --shadow-dark: #e0d5c1;   
+            --shadow-light: #ffffff;  
         }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-            background-color: var(--bg-color);
-            color: #3d4a52;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            font-family: -apple-system, sans-serif; 
+            background-color: var(--bg-color); 
+            color: #5d4037; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
         }
-
-        .container {
-            width: 90%;
-            max-width: 450px;
-            padding: 40px 0 100px 0;
+        .title {
+            color: #e67e22; 
+            margin-top: 50px; 
+            letter-spacing: 2px;
         }
-
-        header {
-            text-align: center;
-            margin-bottom: 50px;
+        .button-container { 
+            width: 90%; 
+            max-width: 400px; 
+            margin-top: 40px; 
         }
-
-        /* 🫧 頂部頭像泡泡 */
-        .icon-circle {
-            width: 90px;
-            height: 90px;
-            background: var(--bg-color);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto 20px auto;
-            box-shadow: 12px 12px 24px var(--shadow-dark), 
-                        -12px -12px 24px var(--shadow-light),
-                        inset 2px 2px 5px var(--accent-white);
+        /* 立體好按的大按鈕 */
+        .nav-btn {
+            display: block; 
+            background: white; 
+            color: #d35400; 
+            text-decoration: none; 
+            font-weight: 900; 
+            font-size: 18px; 
+            padding: 22px; 
+            margin: 25px 0; 
+            border-radius: 25px; 
+            text-align: center; 
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+            border: 2px solid #fff3e0; 
+            cursor: pointer; 
+            transition: all 0.1s ease;
         }
-
-        h1 {
-            font-size: 26px;
-            color: #ffffff;
-            margin: 0;
-            font-weight: 900;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            letter-spacing: 0.1em;
+        /* 手指壓下去的按鈕彈性視覺效果 */
+        .nav-btn:active { 
+            transform: scale(0.96); 
+            box-shadow: inset 4px 4px 10px var(--shadow-dark); 
         }
-
-        .agency-tag {
-            display: inline-block;
-            margin-top: 15px;
-            background: white;
-            color: #8a9da8;
-            padding: 8px 25px;
-            border-radius: 50px;
-            font-size: 13px;
-            font-weight: bold;
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* 🫧 主卡片泡泡：增強懸浮感 */
-        .card {
-            background: var(--bg-color);
-            border-radius: 45px;
-            padding: 30px;
-            margin-bottom: 45px;
-            box-shadow: 15px 15px 30px var(--shadow-dark), 
-                        -15px -15px 30px var(--shadow-light);
-            position: relative;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .time-badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.95);
-            color: #7a8b96;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 900;
-            margin-bottom: 25px;
-            box-shadow: 4px 4px 10px rgba(0,0,0,0.05);
-        }
-
-        .location-title {
-            font-size: 24px;
-            font-weight: 900;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            color: #ffffff;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-
-        .location-title::before {
-            content: "📍";
-            margin-right: 12px;
-            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
-        }
-
-        /* 🫧 內嵌泡泡對話框：內凹與外顯結合 */
-        .glass-box {
-            padding: 20px;
-            border-radius: 30px;
-            margin-top: 18px;
-            font-size: 15px;
-            line-height: 1.8;
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.05), 
-                        4px 4px 12px rgba(0, 0, 0, 0.05);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        /* 特別加強溫馨筆記的色彩 */
-        .note-box {
-            background: rgba(132, 151, 142, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .label {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.85);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            margin-bottom: 12px;
-            display: block;
-            font-weight: 900;
-        }
-
-        .platform-alert {
-            color: #ff6b6b;
-            font-weight: 900;
-            background: #ffffff;
-            padding: 1px 8px;
-            border-radius: 6px;
-            box-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            margin: 0 2px;
-        }
-
-        /* 🫧 地圖按鈕泡泡 */
-        .map-link {
-            color: #7a8b96;
-            text-decoration: none;
-            font-weight: 900;
-            background: #ffffff;
-            padding: 14px 28px;
-            border-radius: 30px;
-            display: inline-block;
-            margin-top: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.1),
-                        inset -2px -2px 5px rgba(0,0,0,0.05);
-        }
-
-        .map-link:active {
-            transform: scale(0.95);
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* 🫧 底部大泡泡 */
-        footer {
-            text-align: center;
-            padding: 40px 10px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .footer-card {
-            background: var(--bg-color);
-            padding: 35px 25px;
-            border-radius: 50px;
-            box-shadow: 12px 12px 24px var(--shadow-dark), 
-                        -12px -12px 24px var(--shadow-light);
-            font-weight: 800;
-            color: white;
-            line-height: 2.2;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .wish-highlight {
-            color: #c98a8a;
-            font-size: 1.2em;
-            display: block;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
-        }
-
-        .pikmin-note {
-            display: block;
-            margin-top: 20px;
-            font-size: 13px;
-            opacity: 0.9;
-            font-style: italic;
-            color: rgba(255,255,255,0.7);
+        .emoji { 
+            font-size: 22px; 
+            margin-right: 8px; 
+            vertical-align: middle; 
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <div class="icon-circle">
-                <span style="font-size: 40px;">🫧</span>
-            </div>
-            <h1>羽庭的皮克敏地圖🗺️</h1>
-            <div class="agency-tag">13旅行社😘</div>
-        </header>
+    <h1 class="title">大阪冒險選擇支☀️</h1>
 
-        <!-- Paris-h -->
-        <div class="card">
-            <div class="time-badge">🕒 5/20 09:00</div>
-            <div class="location-title">Paris-h</div>
-            <div class="glass-box">
-                <span class="label">🚇 坐車懶人包 Transport</span>
-                <div style="font-weight: 600;">
-                    步行 12 分 ➡️ 樽井區間急行（藍色南海本線往泉佐野 <b class="platform-alert">二號月台</b>）➡️ 南海難波步行 7 分改電車 ➡️ 難波站（2進站紅色御堂筋線往江阪 <b class="platform-alert">二號月台</b>）➡️ 淀屋橋（跟著 Kita Gate 路標走 6 出站）➡️ 步行 15 分
-                </div>
-            </div>
-            <div class="glass-box">
-                <span class="label">🗺️ 地圖 Map</span>
-                <a href="https://maps.app.goo.gl/i4eM3zrJAVFyTwEK8" target="_blank" class="map-link">👋！迷路了嗎？點我🙋🏽</a>
-            </div>
-            <div class="glass-box note-box">
-                <span class="label">💡 溫馨筆記 Note</span>
-                <div style="font-weight: 800; font-size: 15px;">帶回台灣的麵包不要買到肉喔 🥖</div>
-            </div>
-        </div>
+    <div class="button-container">
+        
+        <a href="travel.html" class="nav-btn">
+            <span class="emoji">🚗</span>自己旅行
+        </a>
 
-        <!-- 9 Borden Coffee -->
-        <div class="card">
-            <div class="time-badge">🕒 5/20 10:00</div>
-            <div class="location-title">9 Borden Coffee</div>
-            <div class="glass-box">
-                <span class="label">🚇 坐車懶人包 Transport</span>
-                <div style="font-weight: 600;">
-                    步行 8 分鐘 ➡️ 肥後橋（4進站藍色四橋線往住之江公園）<b class="platform-alert">一號月台</b> ➡️ 本町站（換綠色中央線往夢洲）<b class="platform-alert">二號月台</b> ➡️ 大阪港（2 出口）➡️ 步行 4 分
-                </div>
-            </div>
-            <div class="glass-box">
-                <span class="label">🗺️ 地圖 Map</span>
-                <a href="https://maps.app.goo.gl/xoF4GJfkFYQLJTeD8?g_st=ic" target="_blank" class="map-link">👋！迷路了嗎？點我🙋🏽</a>
-            </div>
-            <div class="glass-box note-box">
-                <span class="label">💡 溫馨筆記 Note</span>
-                <div style="font-weight: 800; font-size: 15px;">墨西哥卷🫔好像很好吃😋</div>
-            </div>
-        </div>
+        <a href="Katsura-Ji.html" class="nav-btn" style="color: #c0392b; border-color: #fce4d6;">
+            <span class="emoji">👹</span>勝尾寺
+        </a>
 
-        <!-- 海遊館 -->
-        <div class="card">
-            <div class="time-badge">🕒 5/20 10:30</div>
-            <div class="location-title">海遊館🐟</div>
-            <div class="glass-box">
-                <span class="label">🚇 交通方式 Way</span>
-                <div style="font-weight: 600;">11號公車步行 7 分鐘🚶</div>
-            </div>
-            <div class="glass-box">
-                <span class="label">🗺️ 地圖 Map</span>
-                <a href="https://maps.app.goo.gl/tNq7xmWiJGGuxXWp8?g_st=ic" target="_blank" class="map-link">👋！迷路了嗎？點我🙋🏽</a>
-            </div>
-            <div class="glass-box note-box">
-                <span class="label">💡 溫馨筆記 Note</span>
-                <div style="font-weight: 800; font-size: 15px;">看海遊館越看肚子越餓，這時候來點生魚片最對味🤩</div>
-            </div>
-        </div>
-
-        <!-- 麺々亭 -->
-        <div class="card">
-            <div class="time-badge">🕒 5/20 15:00 / 16:00<br>(提早看完方案)</div>
-            <div class="location-title">麺々亭 🍜</div>
-            <div class="glass-box">
-                <span class="label">🗺️ 地圖 Map</span>
-                <a href="https://maps.app.goo.gl/WDoXeL3GJyWiy8no7?g_st=ic" target="_blank" class="map-link">👋！迷路了嗎？點我🙋🏽</a>
-            </div>
-            <div class="glass-box note-box">
-                <span class="label">💡 溫馨筆記 Note</span>
-                <div style="font-weight: 800; font-size: 15px;">找了一家當地人也喜歡的店，希望合妳口味！</div>
-            </div>
-        </div>
-
-        <!-- 南一園 -->
-        <div class="card">
-            <div class="time-badge">🕒 5/20 17:00<br>(獨自享受選擇☝🏻)</div>
-            <div class="location-title">炭火焼肉 南一園🐮🥩</div>
-            <div class="glass-box">
-                <span class="label">🗺️ 地圖 Map</span>
-                <a href="https://maps.app.goo.gl/pL23DqfS8B6E7KxEA" target="_blank" class="map-link">嘿👋！迷路了嗎？點我🙋</a>
-            </div>
-            <div class="glass-box note-box">
-                <span class="label">💡 導遊心聲 Note</span>
-                <div style="font-weight: 800; font-size: 15px;">幫妳確認過了，這裡有簡體菜單喔！標示很清楚。</div>
-            </div>
-        </div>
-
-        <!-- なるとや -->
-        <div class="card">
-            <div class="time-badge">🕒 5/20 17:00<br>(同伴聚會選擇✌🏼)</div>
-            <div class="location-title">やさい串巻き なるとや🍖</div>
-            <div class="glass-box">
-                <span class="label">🚇 坐車懶人包 Transport</span>
-                <div style="font-weight: 600;">
-                    大阪港（2進站綠色中央線往長田）<span class="platform-alert">一號月台</span> ➡️ 
-                    堺筋本町（換咖啡色堺筋線往天下茶屋）<span class="platform-alert">一號月台</span> ➡️ 
-                    日本橋（East gate 10號出口）
-                </div>
-            </div>
-            <div class="glass-box">
-                <span class="label">🗺️ 地圖 Map</span>
-                <a href="https://maps.app.goo.gl/qwEzTZUTXysyy1QF9?g_st=ic" target="_blank" class="map-link">👋！迷路了嗎？點我🙋🏽</a>
-            </div>
-            <div class="glass-box note-box">
-                <span class="label">💡 溫馨筆記 Note</span>
-                <div style="font-weight: 800; font-size: 15px;">這家店也有簡體中文菜單喔！看不太懂可以拍給 Gemini 唷！幫妳確認了翻譯的很好😊</div>
-            </div>
-        </div>
-
-        <footer>
-            <div class="footer-card">
-                <span class="wish-highlight">祝 羽庭 520 旅途愉快！✨</span>
-                每一口美食、每一處美景，<br>
-                那是這場冒險最好的禮物。🎁<br><br>
-                13旅行社😘 陪伴妳的冒險
-                <span class="pikmin-note">（妳好像我的皮克敏😂）</span>
-            </div>
-        </footer>
     </div>
 
 </body>
 </html>
-
