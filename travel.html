@@ -1,89 +1,326 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>自己旅行隨身誌🚗</title>
+    <title>羽婷的皮克敏地圖🗺️</title>
     <style>
-        :root { 
-            --bg-color: #fdf6ec;      /* 陽光暖奶油色 */
-            --shadow-dark: #e0d5c1; 
-            --shadow-light: #ffffff; 
+        :root {
+            --primary-red: #d32f2f; 
+            --bg-cream: #fffdf5; 
+            --text-dark: #333333;
+            --accent-gold: #fbc02d;
+            --tag-blue: #004098;
+            --tag-red: #e5171f;
+            --tag-green: #019a66;
+            --tag-brown: #9b5e32;
+            --tag-yotsu: #0078ba;
         }
-        body { 
-            margin: 0; 
-            padding: 20px; 
-            font-family: -apple-system, sans-serif; 
-            background-color: var(--bg-color); 
-            color: #5d4037; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-height: 100vh; 
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, "Noto Sans TC", sans-serif;
+            background-color: var(--primary-red);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .countdown { 
-            margin: 20px; 
-            padding: 20px; 
-            border-radius: 25px; 
-            background: rgba(255, 159, 67, 0.15); 
-            color: #d35400; 
-            font-weight: bold; 
-            text-align: center; 
-            width: 80%; 
-            max-width: 350px; 
+
+        .phone-container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--bg-cream);
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            padding-bottom: 50px;
         }
-        .card { 
-            background: white; 
-            border-radius: 30px; 
-            padding: 25px; 
-            margin: 15px 0; 
-            width: 90%; 
-            max-width: 400px; 
-            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light); 
-            border: 1px solid #fff3e0; 
+
+        header {
+            background-color: var(--primary-red);
+            padding: 35px 20px;
+            text-align: center;
+            color: white;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
         }
-        h3 { color: #e67e22; margin: 0 0 10px 0; }
-        .time { color: #e15f41; font-weight: bold; font-size: 14px; margin-bottom: 10px; display: block; }
-        .note { background: #fff9db; padding: 12px; border-radius: 15px; color: #7d5a00; font-size: 14px; line-height: 1.5; margin-bottom: 15px; border-left: 4px solid #f1c40f; }
-        .map-link { display: inline-block; background: #ff9f43; color: white; padding: 12px 24px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 14px; }
-        .back-btn { margin-top: 30px; color: #7a8b96; text-decoration: none; font-size: 14px; font-weight: bold; }
+
+        header h1 { margin: 0; font-size: 26px; font-weight: 900; }
+        .agency-info { font-size: 14px; opacity: 0.9; margin-top: 8px; font-weight: bold; }
+
+        .section-header {
+            padding: 25px 20px 15px 20px;
+            display: flex;
+            align-items: center;
+            font-size: 19px;
+            font-weight: 900;
+            color: var(--primary-red);
+        }
+
+        /* 修正時間軸間距，確保時間不被遮擋 */
+        .timeline-container {
+            padding: 0 20px 0 100px; /* 拉大左側空間給時間標籤 */
+            position: relative;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 35px;
+            border-left: 2px solid #e0e0e0;
+            padding-left: 25px; /* 卡片與線的距離 */
+        }
+
+        .time-label {
+            position: absolute;
+            left: -100px; /* 固定在左側空白處 */
+            top: 0;
+            width: 85px;
+            text-align: right;
+            font-weight: 900;
+            color: var(--primary-red);
+            font-size: 14px;
+            line-height: 1.2;
+        }
+
+        .dot {
+            position: absolute;
+            left: -7px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: #bdbdbd;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .dot.active { background: var(--primary-red); }
+
+        .content-box {
+            background: white;
+            border-radius: 15px;
+            padding: 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid #f0f0f0;
+        }
+
+        .location-name {
+            font-size: 19px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            display: block;
+            color: #000;
+        }
+
+        /* 標籤設計 */
+        .transport-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 6px;
+        }
+
+        .tag-nankai { background-color: var(--tag-blue); }
+        .tag-mido { background-color: var(--tag-red); }
+        .tag-yotsu { background-color: var(--tag-yotsu); }
+        .tag-chuo { background-color: var(--tag-green); }
+        .tag-sakai { background-color: var(--tag-brown); }
+
+        .platform-badge {
+            color: var(--primary-red);
+            font-weight: 900;
+            text-decoration: underline;
+            margin: 0 3px;
+        }
+
+        .guide-box {
+            background-color: #fff9c4;
+            border: 1px solid #fbc02d;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #5d4037;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+
+        .map-btn {
+            display: block;
+            text-align: center;
+            background: #fff;
+            border: 1.5px solid #ddd;
+            color: #444;
+            padding: 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 12px;
+            font-weight: 800;
+        }
+
+        .note-box {
+            background: #f1f8e9;
+            border-left: 4px solid #689f38;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #33691e;
+            font-weight: 600;
+        }
+
+        footer {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .wish-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed var(--primary-red);
+            color: var(--primary-red);
+            font-weight: 900;
+            line-height: 1.8;
+        }
     </style>
 </head>
 <body>
 
-    <h1 style="color: #e67e22; margin-top: 30px;">自駕自由行隨身誌🚗</h1>
-    
-    <div class="countdown" id="timer">準備出發...</div>
+<div class="phone-container">
+    <header>
+        <h1>羽婷的皮克敏地圖 🗺️</h1>
+        <div class="agency-info">13旅行社😘 | 05/20 冒險全紀錄</div>
+    </header>
 
-    <div class="card">
-        <h3>📍 Borden Coffee</h3>
-        <span class="time">🕒 第一站快閃</span>
-        <div class="note">💡 這是妳最想去的咖啡廳，記得拍美照！☕️</div>
-        <a href="https://maps.google.com/?q=Borden+Coffee+Osaka" target="_blank" class="map-link">Google Maps 導航 👋</a>
+    <div class="section-header"><span>🥖</span> 早晨與上午</div>
+
+    <div class="timeline-container">
+        <!-- Paris-h -->
+        <div class="timeline-item">
+            <div class="time-label">09:00</div>
+            <div class="dot active"></div>
+            <div class="content-box">
+                <span class="location-name">Paris-h</span>
+                <div style="font-size:14px; margin-bottom:10px;">🚶 步行 12 分鐘至車站</div>
+                <div>
+                    <span class="transport-tag tag-nankai">藍色南海本線</span><br>
+                    往泉佐野 ➡️ <span class="platform-badge">二號月台</span> 上車
+                </div>
+                <div style="margin: 10px 0; border-top: 1px dashed #eee; padding-top: 10px;">
+                    <span class="transport-tag tag-mido">紅色御堂筋線</span><br>
+                    往江阪 ➡️ <span class="platform-badge">二號月台</span> 上車
+                </div>
+                <div class="guide-box">
+                    淀屋橋站下車，跟著「Kita Gate」路標走，由 <b>6 號出口</b> 出站，步行 15 分鐘。
+                </div>
+                <a href="https://maps.app.goo.gl/i4eM3zrJAVFyTwEK8" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
+                <div class="note-box">💡 帶回台灣的麵包不要買到肉喔 🥖</div>
+            </div>
+        </div>
+
+        <!-- 9 Borden Coffee -->
+        <div class="timeline-item">
+            <div class="time-label">10:00</div>
+            <div class="dot active"></div>
+            <div class="content-box">
+                <span class="location-name">9 Borden Coffee</span>
+                <div>
+                    <span class="transport-tag tag-yotsu">藍色四橋線</span><br>
+                    往住之江公園 ➡️ <span class="platform-badge">一號月台</span> 上車
+                </div>
+                <div style="margin: 10px 0; border-top: 1px dashed #eee; padding-top: 10px;">
+                    <span class="transport-tag tag-chuo">綠色中央線</span><br>
+                    往夢洲 ➡️ <span class="platform-badge">二號月台</span> 上車
+                </div>
+                <div class="guide-box">
+                    大阪港站 <b>2 號出口</b> 出站，步行 4 分鐘。
+                </div>
+                <a href="https://maps.app.goo.gl/xoF4GJfkFYQLJTeD8?g_st=ic" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
+                <div class="note-box">💡 墨西哥卷🫔好像很好吃😋</div>
+            </div>
+        </div>
+
+        <!-- 海遊館 -->
+        <div class="timeline-item">
+            <div class="time-label">10:30</div>
+            <div class="dot active"></div>
+            <div class="content-box">
+                <span class="location-name">海遊館🐟</span>
+                <div style="font-size:14px;">🚶 步行 7 分鐘即可抵達</div>
+                <a href="https://maps.app.goo.gl/tNq7xmWiJGGuxXWp8?g_st=ic" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
+                <div class="note-box">💡 看海遊館越看肚子越餓，這時候來點生魚片最對味🤩</div>
+            </div>
+        </div>
     </div>
 
-    <div class="card">
-        <h3>📍 Paris-h 麵包店</h3>
-        <span class="time">🕒 09:00 準時報到</span>
-        <div class="note">💡 提醒羽庭：帶回台灣的麵包不要買到含有肉類的成分喔🥖</div>
-        <a href="https://maps.google.com/?q=Paris-h+Osaka" target="_blank" class="map-link">地圖傳送門 👋</a>
+    <div class="section-header"><span>🍜</span> 下午與晚餐方案</div>
+
+    <div class="timeline-container">
+        <!-- 麺々亭 -->
+        <div class="timeline-item">
+            <div class="time-label">15:00 /<br>16:00</div>
+            <div class="dot active"></div>
+            <div class="content-box">
+                <span class="location-name">麺々亭 🍜 (提早看完方案)</span>
+                <a href="https://maps.app.goo.gl/WDoXeL3GJyWiy8no7?g_st=ic" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
+                <div class="note-box">💡 找了一家當地人也喜歡的店，希望合妳口味！</div>
+            </div>
+        </div>
+
+        <!-- 南一園 -->
+        <div class="timeline-item">
+            <div class="time-label">17:00</div>
+            <div class="dot active"></div>
+            <div class="content-box">
+                <span class="location-name">炭火焼肉 南一園🐮🥩<br><small>(獨自享受選擇☝🏻)</small></span>
+                <a href="https://maps.app.goo.gl/pL23DqfS8B6E7KxEA" target="_blank" class="map-btn">嘿👋！迷路了嗎？點我🙋</a>
+                <div class="note-box">💡 導遊心聲：幫妳確認過了，這裡有簡體菜單喔！標示很清楚。</div>
+            </div>
+        </div>
+
+        <!-- なるとや -->
+        <div class="timeline-item">
+            <div class="time-label">17:00</div>
+            <div class="dot active"></div>
+            <div class="content-box">
+                <span class="location-name">やさい串巻き なるとや🍖<br><small>(同伴聚會選擇✌🏼)</small></span>
+                <div>
+                    <span class="transport-tag tag-chuo">綠色中央線</span><br>
+                    往長田 ➡️ <span class="platform-badge">一號月台</span> 上車
+                </div>
+                <div style="margin: 10px 0; border-top: 1px dashed #eee; padding-top: 10px;">
+                    <span class="transport-tag tag-sakai">咖啡色堺筋線</span><br>
+                    往天下茶屋 ➡️ <span class="platform-badge">一號月台</span> 上車
+                </div>
+                <div class="guide-box">
+                    日本橋站 <b>East gate 10 號出口</b>。
+                </div>
+                <a href="https://maps.app.goo.gl/qwEzTZUTXysyy1QF9?g_st=ic" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
+                <div class="note-box">💡 這家店也有簡體中文菜單，看不太懂可以拍給 Gemini 唷！</div>
+                <a href="index.html" class="back-btn">⬅️ 返回冒險選擇支線</a>
+            </div>
+        </div>
     </div>
 
-    <a href="index.html" class="back-btn">⬅️ 返回冒險選擇支</a>
+    <footer>
+        <div class="wish-card">
+            祝 羽庭 520 旅途愉快！✨<br>
+            每一口美食、每一處美景，<br>
+            那是這場冒險最好的禮物。🎁<br>
+            <br>
+            13旅行社😘 陪伴妳的冒險
+        </div>
+    </footer>
+</div>
 
-    <script>
-        function updateTimer() {
-            const target = new Date('May 20, 2026 09:00:00').getTime();
-            const now = new Date().getTime();
-            const diff = target - now;
-            if (diff < 0) { document.getElementById('timer').innerHTML = "大阪之旅進行中！🇯🇵"; return; }
-            const d = Math.floor(diff / 86400000);
-            const h = Math.floor((diff % 86400000) / 3600000);
-            const m = Math.floor((diff % 3600000) / 60000);
-            const s = Math.floor((diff % 60000) / 1000);
-            document.getElementById('timer').innerHTML = `距離出發：${d}天 ${h}時 ${m}分 ${s}秒`;
-        }
-        setInterval(updateTimer, 1000); updateTimer();
-    </script>
 </body>
 </html>
+
+```
