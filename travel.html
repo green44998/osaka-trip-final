@@ -4,13 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>羽婷的皮克敏地圖🗺️</title>
+    <title>羽庭的皮克敏地圖🗺️</title>
     <style>
         :root {
-            --primary-red: #d32f2f; 
+            --bg-color: #d32f2f; 
+            --shadow-dark: #a12323;
+            --shadow-light: #ff3d3d;
+            --accent-white: rgba(255, 255, 255, 0.4);
+            --gold-accent: #fbc02d;
+            --step-bg: rgba(255, 255, 255, 0.12);
             --bg-cream: #fffdf5; 
             --text-dark: #333333;
-            --accent-gold: #fbc02d;
             --tag-blue: #004098;
             --tag-red: #e5171f;
             --tag-green: #019a66;
@@ -22,7 +26,7 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, "Noto Sans TC", sans-serif;
-            background-color: var(--primary-red);
+            background-color: var(--bg-color);
             color: var(--text-dark);
             display: flex;
             flex-direction: column;
@@ -39,7 +43,7 @@
         }
 
         header {
-            background-color: var(--primary-red);
+            background-color: var(--bg-color);
             padding: 35px 20px;
             text-align: center;
             color: white;
@@ -56,12 +60,11 @@
             align-items: center;
             font-size: 19px;
             font-weight: 900;
-            color: var(--primary-red);
+            color: var(--bg-color);
         }
 
-        /* 修正時間軸間距，確保時間不被遮擋 */
         .timeline-container {
-            padding: 0 20px 0 100px; /* 拉大左側空間給時間標籤 */
+            padding: 0 20px 0 100px; 
             position: relative;
         }
 
@@ -69,17 +72,17 @@
             position: relative;
             padding-bottom: 35px;
             border-left: 2px solid #e0e0e0;
-            padding-left: 25px; /* 卡片與線的距離 */
+            padding-left: 25px; 
         }
 
         .time-label {
             position: absolute;
-            left: -100px; /* 固定在左側空白處 */
+            left: -100px; 
             top: 0;
             width: 85px;
             text-align: right;
             font-weight: 900;
-            color: var(--primary-red);
+            color: var(--bg-color);
             font-size: 14px;
             line-height: 1.2;
         }
@@ -95,7 +98,7 @@
             border: 2px solid white;
         }
 
-        .dot.active { background: var(--primary-red); }
+        .dot.active { background: var(--bg-color); }
 
         .content-box {
             background: white;
@@ -113,7 +116,6 @@
             color: #000;
         }
 
-        /* 標籤設計 */
         .transport-tag {
             display: inline-flex;
             align-items: center;
@@ -132,7 +134,7 @@
         .tag-sakai { background-color: var(--tag-brown); }
 
         .platform-badge {
-            color: var(--primary-red);
+            color: var(--bg-color);
             font-weight: 900;
             text-decoration: underline;
             margin: 0 3px;
@@ -184,10 +186,25 @@
             background: white;
             padding: 25px;
             border-radius: 20px;
-            border: 2px dashed var(--primary-red);
-            color: var(--primary-red);
+            border: 2px dashed var(--bg-color);
+            color: var(--bg-color);
             font-weight: 900;
             line-height: 1.8;
+        }
+
+        /* 調整返回按鈕：置中、灰色、消除底線 */
+        .back-btn {
+            display: block;
+            text-align: center;
+            padding: 25px 10px;
+            color: #888888 !important;
+            text-decoration: none !important;
+            font-size: 14px;
+            font-weight: bold;
+            transition: color 0.2s ease;
+        }
+        .back-btn:hover {
+            color: #555555 !important;
         }
     </style>
 </head>
@@ -195,7 +212,7 @@
 
 <div class="phone-container">
     <header>
-        <h1>羽婷的皮克敏地圖 🗺️</h1>
+        <h1>羽庭的皮克敏地圖 🗺️</h1>
         <div class="agency-info">13旅行社😘 | 05/20 冒險全紀錄</div>
     </header>
 
@@ -218,10 +235,9 @@
                     往江阪 ➡️ <span class="platform-badge">二號月台</span> 上車
                 </div>
                 <div class="guide-box">
-                    淀屋橋站下車，跟著「Kita Gate」路標走，由 <b>6 號出口</b> 出站，步行 15 分鐘。
+                    淀屋橋站下車，由 <b>6 號出口</b> 出站。
                 </div>
                 <a href="https://maps.app.goo.gl/i4eM3zrJAVFyTwEK8" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
-                <div class="note-box">💡 帶回台灣的麵包不要買到肉喔 🥖</div>
             </div>
         </div>
 
@@ -243,7 +259,6 @@
                     大阪港站 <b>2 號出口</b> 出站，步行 4 分鐘。
                 </div>
                 <a href="https://maps.app.goo.gl/xoF4GJfkFYQLJTeD8?g_st=ic" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
-                <div class="note-box">💡 墨西哥卷🫔好像很好吃😋</div>
             </div>
         </div>
 
@@ -255,39 +270,40 @@
                 <span class="location-name">海遊館🐟</span>
                 <div style="font-size:14px;">🚶 步行 7 分鐘即可抵達</div>
                 <a href="https://maps.app.goo.gl/tNq7xmWiJGGuxXWp8?g_st=ic" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
-                <div class="note-box">💡 看海遊館越看肚子越餓，這時候來點生魚片最對味🤩</div>
             </div>
         </div>
     </div>
 
-    <div class="section-header"><span>🍜</span> 下午與晚餐方案</div>
+    <div class="section-header"><span>🎒</span> 下午冒險</div>
 
     <div class="timeline-container">
         <!-- 麺々亭 -->
         <div class="timeline-item">
-            <div class="time-label">15:00 /<br>16:00</div>
+            <div class="time-label">16:00</div>
             <div class="dot active"></div>
             <div class="content-box">
-                <span class="location-name">麺々亭 🍜 (提早看完方案)</span>
+                <span class="location-name">麺々亭 🍜 (備案方案)</span>
                 <a href="https://maps.app.goo.gl/WDoXeL3GJyWiy8no7?g_st=ic" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
-                <div class="note-box">💡 找了一家當地人也喜歡的店，希望合妳口味！</div>
             </div>
         </div>
+    </div>
 
+    <div class="section-header"><span>🍴</span> 晚餐方案選擇</div>
+
+    <div class="timeline-container">
         <!-- 南一園 -->
         <div class="timeline-item">
-            <div class="time-label">17:00</div>
+            <div class="time-label">17:30</div>
             <div class="dot active"></div>
             <div class="content-box">
                 <span class="location-name">炭火焼肉 南一園🐮🥩<br><small>(獨自享受選擇☝🏻)</small></span>
                 <a href="https://maps.app.goo.gl/pL23DqfS8B6E7KxEA" target="_blank" class="map-btn">嘿👋！迷路了嗎？點我🙋</a>
-                <div class="note-box">💡 導遊心聲：幫妳確認過了，這裡有簡體菜單喔！標示很清楚。</div>
             </div>
         </div>
 
         <!-- なるとや -->
         <div class="timeline-item">
-            <div class="time-label">17:00</div>
+            <div class="time-label">17:30</div>
             <div class="dot active"></div>
             <div class="content-box">
                 <span class="location-name">やさい串巻き なるとや🍖<br><small>(同伴聚會選擇✌🏼)</small></span>
@@ -304,11 +320,9 @@
                 </div>
                 <a href="https://maps.app.goo.gl/qwEzTZUTXysyy1QF9?g_st=ic" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
                 <div class="note-box">💡 這家店也有簡體中文菜單，看不太懂可以拍給 Gemini 唷！</div>
-                <a href="index.html" class="back-btn">⬅️ 返回冒險選擇支線</a>
+                <!-- 已完全刪除卡片內部重複的返回按鈕 -->
             </div>
         </div>
-
-          
     </div>
 
     <footer>
@@ -320,7 +334,8 @@
             13旅行社😘 陪伴妳的冒險
         </div>
     </footer>
-  <a href="index.html" class="back-btn">⬅️ 返回冒險選擇支線</a>
+    <!-- 僅保留此處，並已在 CSS 設定為灰色、置中與無底線 -->
+    <a href="index.html" class="back-btn">⬅️ 返回冒險選擇支線</a>
 </div>
 
 </body>
