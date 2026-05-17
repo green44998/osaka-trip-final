@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel 飯店周邊指南 🏪🍔</title>
+    <style>
+        :root {
+            --brand-red: #d32f2f;
+            --brand-gold: #b8922e;
+            --bg-cream: #fffdf5; 
+            --text-dark: #333333;
+            --tag-cvs: #007f5f;
+            --tag-ramen: #e76f51;
+            --tag-chinese: #f4a261;
+            --tag-sushi: #2a9d8f;
+            --tag-cafe: #8f2d56;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, "Noto Sans TC", sans-serif;
+            background-color: var(--brand-red);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .phone-container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--bg-cream);
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            padding-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--brand-red);
+            padding: 35px 20px;
+            text-align: center;
+            color: white;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        header h1 { margin: 0; font-size: 24px; font-weight: 900; }
+        .agency-info { font-size: 14px; opacity: 0.9; margin-top: 8px; font-weight: bold; }
+
+        .section-header {
+            padding: 25px 20px 15px 20px;
+            display: flex;
+            align-items: center;
+            font-size: 19px;
+            font-weight: 900;
+            color: var(--brand-red);
+        }
+
+        .section-header span {
+            margin-right: 8px;
+        }
+
+        .cards-grid {
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+            border: 1px solid #eee;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .info-card:active {
+            transform: scale(0.98);
+        }
+
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .category-tag {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .tag-cvs { background-color: var(--tag-cvs); }
+        .tag-ramen { background-color: var(--tag-ramen); }
+        .tag-chinese { background-color: var(--tag-chinese); }
+        .tag-sushi { background-color: var(--tag-sushi); }
+        .tag-cafe { background-color: var(--tag-cafe); }
+
+        .distance-badge {
+            background-color: #f0f0f0;
+            color: #666;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #111;
+            margin: 0 0 8px 0;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+            margin: 0 0 14px 0;
+        }
+
+        .address-box {
+            background-color: #fafafa;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #999;
+            border: 1px solid #f0f0f0;
+            margin-bottom: 12px;
+            word-break: break-all;
+        }
+
+        .map-btn {
+            display: block;
+            text-align: center;
+            background: #fff;
+            border: 1.5px solid #ddd;
+            color: #444;
+            padding: 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 800;
+            transition: background-color 0.2s ease;
+        }
+
+        .map-btn:hover {
+            background-color: #f9f9f9;
+        }
+
+        .hint-box {
+            background-color: #fff9e6;
+            border-left: 4px solid var(--brand-gold);
+            padding: 10px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #856404;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        footer {
+            padding: 40px 20px 20px 20px;
+            text-align: center;
+        }
+
+        .wish-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed var(--brand-red);
+            color: var(--brand-red);
+            font-weight: 900;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            padding: 25px 10px;
+            color: #888888 !important;
+            text-decoration: none !important;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: auto;
+        }
+        .back-btn:hover {
+            color: #555555 !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-container">
+    <header>
+        <h1>Hotel 飯店周邊指南 🏪</h1>
+        <div class="agency-info">13旅行社😘 | 貼心生活備案</div>
+    </header>
+
+    <!-- 超商小卡區 -->
+    <div class="section-header"><span>🏪</span> 便利商店推薦</div>
+    <div class="cards-grid">
+        <!-- 全家 -->
+        <div class="info-card">
+            <div class="card-header-row">
+                <span class="category-tag tag-cvs">便利超商</span>
+                <span class="distance-badge">🚶 5 分鐘</span>
+            </div>
+            <h3 class="card-title">FamilyMart 泉南中之庄店 🟢</h3>
+            <p class="card-desc">距離飯店最近的超商，店鋪寬敞、附設大型停車場。晚上想要來包洋芋片或熱騰騰的 Famichiki 炸雞，直奔這間最快！</p>
+            <div class="address-box">大阪府泉南市中之庄291-1</div>
+            <a href="https://maps.google.com/?q=FamilyMart+泉南中之庄店" target="_blank" class="map-btn">📍 Google Map 導航</a>
+        </div>
+
+        <!-- 7-11 -->
+        <div class="info-card">
+            <div class="card-header-row">
+                <span class="category-tag tag-cvs">便利超商</span>
+                <span class="distance-badge">🚶 9 分鐘</span>
+            </div>
+            <h3 class="card-title">7-Eleven 泉南樽井店 🔴</h3>
+            <p class="card-desc">就在「樽井站」前的幹道斜對面。如果是坐車回飯店的路上，順路去這間 7-11 補貨最完美，直接拎著宵夜回飯店泡澡！</p>
+            <div class="address-box">大阪府泉南市樽井1丁目10-25</div>
+            <a href="https://maps.google.com/?q=7-Eleven+泉南樽井店" target="_blank" class="map-btn">📍 Google Map 導航</a>
+        </div>
+    </div>
+
+    <!-- 美食小卡區 -->
+    <div class="section-header"><span>🍜</span> 周邊在地美食</div>
+    <div class="cards-grid">
+        <!-- 薩摩っ子 -->
+        <div class="info-card">
+            <div class="card-header-row">
+                <span class="category-tag tag-ramen">大蒜拉麵</span>
+                <span class="distance-badge">🚶 10 分鐘</span>
+            </div>
+            <h3 class="card-title">薩摩っ子拉麵 泉南店 🍜</h3>
+            <p class="card-desc">大阪超有名的元祖大蒜拉麵！湯頭是非常濃郁的豚骨風味，搭配超厚的肥美叉燒肉，晚上吸上一大口熱麵保證大呼過癮！</p>
+            <div class="hint-box">💡 13旅行社悄悄話：它是暖呼呼的宵夜首選喔！有附停車場，步行也很方便。</div>
+            <div class="address-box">大阪府泉南市中之庄290-1</div>
+            <a href="https://maps.google.com/?q=薩摩っ子+泉南店" target="_blank" class="map-btn">📍 Google Map 導航</a>
+        </div>
+
+        <!-- 濱壽司 -->
+        <div class="info-card">
+            <div class="card-header-row">
+                <span class="category-tag tag-sushi">平價壽司</span>
+                <span class="distance-badge">🚶 12 分鐘</span>
+            </div>
+            <h3 class="card-title">はま寿司 (濱壽司) 🍣</h3>
+            <p class="card-desc">日本超平價人氣迴轉壽司，每盤 100 日圓起！點餐平板有繁體中文介面，握壽司、天婦羅、炸雞跟甜點品項多到選不完！</p>
+            <div class="address-box">大阪府泉南市樽井1丁目11-4</div>
+            <a href="https://maps.google.com/?q=はま寿司+泉南樽井店" target="_blank" class="map-btn">📍 Google Map 導航</a>
+        </div>
+
+        <!-- 餃子的王將 -->
+        <div class="info-card">
+            <div class="card-header-row">
+                <span class="category-tag tag-chinese">中華料理</span>
+                <span class="distance-badge">🚶 12 分鐘</span>
+            </div>
+            <h3 class="card-title">餃子的王將 泉南店 🥟</h3>
+            <p class="card-desc">日本靈魂級的中華料理老字號！金黃香脆的煎餃跟大火翻炒、香氣四溢的炒飯，絕對是平價吃飽的安心好味道。</p>
+            <div class="hint-box">💡 13的點餐策略：它跟「はま寿司」就在大馬路的隔壁！走過去看哪家不用排隊就進去哪家，超好靈活變通！</div>
+            <div class="address-box">大阪府泉南市樽井1丁目11-1</div>
+            <a href="https://maps.google.com/?q=餃子の王將+泉南店" target="_blank" class="map-btn">📍 Google Map 導航</a>
+        </div>
+
+        <!-- Cafe t-green -->
+        <div class="info-card">
+            <div class="card-header-row">
+                <span class="category-tag tag-cafe">溫馨下午茶</span>
+                <span class="distance-badge">🚶 10 分鐘</span>
+            </div>
+            <h3 class="card-title">Cafe t-green ☕🎂</h3>
+            <p class="card-desc">樽井站附近溫暖的手作輕食咖啡館，每日手作戚風蛋糕極為綿密柔軟，也有精緻的日式定食，是很適合放空歇腳的小角落。</p>
+            <div class="address-box">大阪府泉南市樽井5丁目3-17</div>
+            <a href="https://maps.google.com/?q=Cafe+t-green+泉南市" target="_blank" class="map-btn">📍 Google Map 導航</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="wish-card">
+            13旅行社😘 貼心關懷提示：<br>
+            「吃飽飽，才能睡個好覺，<br>
+            迎接明天元氣滿滿的冒險喔！✨🍰」
+        </div>
+    </footer>
+    
+    <!-- 返回按鈕 -->
+    <a href="index.html" class="back-btn">⬅️ 返回冒險選擇支線</a>
+</div>
+
+</body>
+</html>
