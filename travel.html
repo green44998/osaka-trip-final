@@ -20,6 +20,7 @@
             --tag-green: #019a66;
             --tag-brown: #9b5e32;
             --tag-yotsu: #0078ba;
+            --tag-senni: #ec6699; /* 千日前線粉紅色 */
         }
 
         body {
@@ -166,6 +167,15 @@
             font-weight: 800;
         }
 
+        .map-sub-text {
+            display: block;
+            text-align: center;
+            font-size: 12px;
+            color: #888888;
+            margin-top: 6px;
+            font-weight: bold;
+        }
+
         .note-box {
             background: #f1f8e9;
             border-left: 4px solid #689f38;
@@ -192,7 +202,6 @@
             line-height: 1.8;
         }
 
-        /* 調整返回按鈕：置中、灰色、消除底線 */
         .back-btn {
             display: block;
             text-align: center;
@@ -221,55 +230,81 @@
     <div class="timeline-container">
         <!-- Paris-h -->
         <div class="timeline-item">
-            <div class="time-label">09:00</div>
+            <div class="time-label">08:00</div>
             <div class="dot active"></div>
             <div class="content-box">
-                <span class="location-name">Paris-h</span>
-                <div style="font-size:14px; margin-bottom:10px;">🚶 步行 12 分鐘至車站</div>
+                <span class="location-name">Paris-h 🥐</span>
+                <div style="font-size:14px; margin-bottom:10px;">
+                    🚶 <b>Hotel The Next Kanku</b> 08:00 出發，步行 11 分鐘 (約 800 公尺) 前往「樽井站」。
+                </div>
+                
                 <div>
-                    <span class="transport-tag tag-nankai">藍色南海本線</span><br>
-                    往泉佐野 ➡️ <span class="platform-badge">二號月台</span> 上車
+                    <span class="transport-tag tag-nankai">南海本線 (普通)</span><br>
+                    往和歌山市 ➡️ 前往 <span class="platform-badge">1 號月台</span> 搭乘。<br>
+                    <span style="font-size: 13px; color: #555;">(08:12 發車，坐 1 站，於 08:16 抵達尾崎站)</span>
                 </div>
+                
                 <div style="margin: 10px 0; border-top: 1px dashed #eee; padding-top: 10px;">
-                    <span class="transport-tag tag-mido">紅色御堂筋線</span><br>
-                    往江阪 ➡️ <span class="platform-badge">二號月台</span> 上車
+                    <span class="transport-tag tag-nankai">南海特急 SOUTHERN</span><br>
+                    往南海難波 ➡️ 步行 2 分鐘轉乘，前往 <span class="platform-badge">3 / 4 號月台</span> 搭乘。<br>
+                    <span style="font-size: 13px; color: #555;">(08:24 發車，坐 6 站，於 09:02 抵達南海難波站，全車對號座)</span>
                 </div>
+
+                <div style="margin: 10px 0; border-top: 1px dashed #eee; padding-top: 10px;">
+                    <span class="transport-tag tag-yotsu">四橋線 (普通)</span><br>
+                    往西梅田 ➡️ 步行 11 分鐘，由難波站 <span class="platform-badge">32 號入口</span> 進站，前往 <span class="platform-badge">2 號月台</span> 搭乘。<br>
+                    <span style="font-size: 13px; color: #555;">(09:13 發車，坐 3 站，於 09:18 抵達肥後橋站)</span>
+                </div>
+
                 <div class="guide-box">
-                    淀屋橋站下車，由 <b>6 號出口</b> 出站。
+                    🚩 <b>出站指引</b>：<br>
+                    肥後橋站下車後，跟著通往 <b>「North Ticket gate」</b> 的路標走，由 <b>4 號出口</b> 出站，步行 8 分鐘 (約 500 公尺) 即可於 <b>09:32</b> 抵達 Paris-h 囉！
                 </div>
                 <a href="https://maps.app.goo.gl/i4eM3zrJAVFyTwEK8" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
+                <div class="note-box">💡 帶回台灣的麵包不要買到肉喔 🥖</div>
             </div>
         </div>
 
         <!-- 9 Borden Coffee -->
         <div class="timeline-item">
-            <div class="time-label">10:00</div>
+            <div class="time-label">10:34</div>
             <div class="dot active"></div>
             <div class="content-box">
-                <span class="location-name">9 Borden Coffee</span>
+                <span class="location-name">9 Borden Coffee ☕</span>
+                <div style="font-size:14px; margin-bottom:10px;">
+                    🚶 <b>Paris-h</b> 10:00 出發，步行 8 分鐘 (約 550 公尺) 前往「肥後橋站」。
+                </div>
+                
                 <div>
-                    <span class="transport-tag tag-yotsu">藍色四橋線</span><br>
-                    往住之江公園 ➡️ <span class="platform-badge">一號月台</span> 上車
+                    <span class="transport-tag tag-yotsu">四橋線 (普通)</span><br>
+                    往住之江公園 ➡️ 由肥後橋站 <span class="platform-badge">4 號入口</span> 進站，前往 <span class="platform-badge">1 號月台</span> 搭乘。<br>
+                    <span style="font-size: 13px; color: #555;">(10:08 發車，坐 1 站，於 10:10 抵達本町站)</span>
                 </div>
+                
                 <div style="margin: 10px 0; border-top: 1px dashed #eee; padding-top: 10px;">
-                    <span class="transport-tag tag-chuo">綠色中央線</span><br>
-                    往夢洲 ➡️ <span class="platform-badge">二號月台</span> 上車
+                    <span class="transport-tag tag-chuo">中央線 (普通)</span><br>
+                    往宇宙廣場 ➡️ 在本町站內步行約 3 分鐘轉乘，並於 <span class="platform-badge">2 號月台</span> 候車。<br>
+                    <span style="font-size: 13px; color: #555;">(10:20 發車，坐 5 站，於 10:31 抵達大阪港站)</span>
                 </div>
+
                 <div class="guide-box">
-                    大阪港站 <b>2 號出口</b> 出站，步行 4 分鐘。
+                    🚩 <b>出站指引</b>：<br>
+                    大阪港站下車後，跟著通往 <b>「西改札」</b> 的路標走，由 <b>2 號出口</b> 出站，步行 4 分鐘 (約 240 公尺) 即可於 <b>10:34</b> 抵達 9 Borden Coffee 囉！
                 </div>
                 <a href="https://maps.app.goo.gl/xoF4GJfkFYQLJTeD8?g_st=ic" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
+                <div class="note-box">💡 墨西哥卷🫔好像很好吃😋</div>
             </div>
         </div>
 
         <!-- 海遊館 -->
         <div class="timeline-item">
-            <div class="time-label">10:30</div>
+            <div class="time-label">12:00</div>
             <div class="dot active"></div>
             <div class="content-box">
                 <span class="location-name">海遊館🐟</span>
-                <div style="font-size:14px;">🚶 步行 7 分鐘即可抵達</div>
+                <div style="font-size:14px;">🚶 從咖啡廳步行 7 分鐘即可抵達</div>
                 <a href="https://maps.app.goo.gl/tNq7xmWiJGGuxXWp8?g_st=ic" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
+                <div class="note-box">💡 看海遊館越看肚子越餓，這時候來點生魚片最對味🤩</div>
             </div>
         </div>
     </div>
@@ -293,34 +328,65 @@
     <div class="timeline-container">
         <!-- 南一園 -->
         <div class="timeline-item">
-            <div class="time-label">17:30</div>
+            <div class="time-label">18:04</div>
             <div class="dot active"></div>
             <div class="content-box">
-                <span class="location-name">炭火焼肉 南一園🐮🥩<br><small>(獨自享受選擇☝🏻)</small></span>
-                <a href="https://maps.app.goo.gl/pL23DqfS8B6E7KxEA" target="_blank" class="map-btn">嘿👋！迷路了嗎？點我🙋</a>
+                <span class="location-name">炭火焼肉 南一園 🐮🥩<br><small>(獨自享受選擇☝🏻)</small></span>
+                <div style="font-size:14px; margin-bottom:10px;">
+                    🚶 <b>海遊館</b> 17:30 出發，步行 10 分鐘 (約 650 公尺) 前往「大阪港站」。
+                </div>
+                
+                <div>
+                    <span class="transport-tag tag-chuo">中央線 (普通)</span><br>
+                    往學研奈良登美丘 ➡️ 由大阪港站 <span class="platform-badge">2 號入口</span> 進站，前往 <span class="platform-badge">1 號月台</span> 搭乘。<br>
+                    <span style="font-size: 13px; color: #555;">(17:57 發車，坐 4 站，於 18:06 抵達阿波座站)</span>
+                </div>
+                
+                <div style="margin: 10px 0; border-top: 1px dashed #eee; padding-top: 10px;">
+                    <span class="transport-tag tag-sakai">千日前線 (普通)</span><br>
+                    往南巽 ➡️ 在阿波座站內步行約 2 分鐘轉乘，前往 <span class="platform-badge">1 號月台</span> 候車。<br>
+                    <span style="font-size: 13px; color: #555;">(18:11 發車，坐 3 站，於 18:16 抵達難波站)</span>
+                </div>
+
+                <div class="guide-box">
+                    🚩 <b>出站指引</b>：<br>
+                    難波站下車後，跟著通往 <b>「Naka Gate」</b> 的路標走，由 <b>11 號出口</b> 出站，步行 5 分鐘 (約 350 公尺) 即可於 <b>18:20 (標記時間 18:04 順延)</b> 抵達南一園燒肉囉！
+                </div>
+                <a href="https://maps.app.goo.gl/qzVnvMZDqpvpxwkz5?g_st=ic" target="_blank" class="map-btn">嘿👋！迷路了嗎？點我🙋</a>
+                <span class="map-sub-text">地圖是從海生館到焼肉館喔❤️</span>
             </div>
         </div>
 
-        <!-- なるとや -->
+        <!-- なるとや (已根據 3 張最新截圖補足完整的交通轉乘指引與小字備註) -->
         <div class="timeline-item">
-            <div class="time-label">17:30</div>
+            <div class="time-label">18:04</div>
             <div class="dot active"></div>
             <div class="content-box">
-                <span class="location-name">やさい串巻き なるとや🍖<br><small>(同伴聚會選擇✌🏼)</small></span>
+                <span class="location-name">яさい串巻き なるとや🍖<br><small>(同伴聚會選擇✌🏼)</small></span>
+                <div style="font-size:14px; margin-bottom:10px;">
+                    🚶 <b>海遊館</b> 17:30 出發，步行 10 分鐘 (約 650 公尺) 前往「大阪港站」。
+                </div>
+                
                 <div>
-                    <span class="transport-tag tag-chuo">綠色中央線</span><br>
-                    往長田 ➡️ <span class="platform-badge">一號月台</span> 上車
+                    <span class="transport-tag tag-chuo">中央線 (普通)</span><br>
+                    往學研奈良登美丘 ➡️ 由大阪港站 <span class="platform-badge">2 號入口</span> 進站，前往 <span class="platform-badge">1 號月台</span> 搭乘。<br>
+                    <span style="font-size: 13px; color: #555;">(17:57 發車，坐 6 站，於 18:10 抵達堺筋本町站)</span>
                 </div>
+                
                 <div style="margin: 10px 0; border-top: 1px dashed #eee; padding-top: 10px;">
-                    <span class="transport-tag tag-sakai">咖啡色堺筋線</span><br>
-                    往天下茶屋 ➡️ <span class="platform-badge">一號月台</span> 上車
+                    <span class="transport-tag tag-sakai">堺筋線 (普通)</span><br>
+                    往天下茶屋 ➡️ 在堺筋本町站內步行約 1 分鐘轉乘，並於 <span class="platform-badge">1 號月台</span> 候車。<br>
+                    <span style="font-size: 13px; color: #555;">(18:13 發車，坐 2 站，於 18:16 抵達日本橋站)</span>
                 </div>
+
                 <div class="guide-box">
-                    日本橋站 <b>East gate 10 號出口</b>。
+                    🚩 <b>出站指引</b>：<br>
+                    日本橋站下車後，跟著通往 <b>「East Gate」</b> 的路標走，由 <b>10 號出口</b> 出站，步行 9 分鐘 (約 550 公尺) 即可於 <b>18:24 (標記時間 18:04 順延)</b> 抵達なるとや囉！
                 </div>
                 <a href="https://maps.app.goo.gl/qwEzTZUTXysyy1QF9?g_st=ic" target="_blank" class="map-btn">👋！迷路了嗎？點我🙋🏽</a>
+                <!-- 已精確加上妳要求的小字灰色備註 -->
+                <span class="map-sub-text">地圖是從海生館到やさい串巻き なるとや喔❤️</span>
                 <div class="note-box">💡 這家店也有簡體中文菜單，看不太懂可以拍給 Gemini 唷！</div>
-                <!-- 已完全刪除卡片內部重複的返回按鈕 -->
             </div>
         </div>
     </div>
@@ -334,7 +400,6 @@
             13旅行社😘 陪伴妳的冒險
         </div>
     </footer>
-    <!-- 僅保留此處，並已在 CSS 設定為灰色、置中與無底線 -->
     <a href="index.html" class="back-btn">⬅️ 返回冒險選擇支線</a>
 </div>
 
