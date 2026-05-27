@@ -4,235 +4,655 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>羽婷的關西冒險選擇支線 🗺️</title>
+    <title>嘉義・皮克敏文青散步小旅行</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        mori: {
+                            dark: '#2A4D38',    /* 森林深綠 */
+                            light: '#E6ECE9',   /* 淺綠襯底 */
+                            warm: '#F9F6F0',    /* 文青米白 */
+                            wood: '#8C6239',    /* 暖木棕 */
+                            accent: '#E07A5F'  /* 復古橘紅 */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary-red: #d32f2f; /* 勝尾寺質感紅 */
-            --bg-cream: #fffdf5;  /* 柔和奶白底色 */
-            --text-dark: #333333;
-            --accent-gold: #fbc02d; /* 溫暖金色 */
-            --shadow-dark: rgba(211, 47, 47, 0.2);
-        }
-
         body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, "Noto Sans TC", sans-serif;
-            background-color: var(--primary-red);
-            color: var(--text-dark);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F9F6F0;
+            user-select: none;
         }
-
-        .phone-container {
-            width: 100%;
-            max-width: 450px;
-            background: var(--bg-cream);
-            min-height: 100vh;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+        .page-content {
+            display: none;
         }
-
-        /* 頂部波浪與頭像 */
-        header {
-            background-color: var(--primary-red);
-            padding: 40px 20px;
-            text-align: center;
-            color: white;
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
-            box-shadow: 0 10px 20px var(--shadow-dark);
+        .page-content.active {
+            display: block;
         }
-
-        .avatar-circle {
-            width: 85px;
-            height: 85px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto 15px auto;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
+        /* 隱藏滾動條但保持功能 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 900;
-            letter-spacing: 0.05em;
-        }
-
-        header p {
-            margin: 8px 0 0;
-            font-size: 14px;
-            opacity: 0.9;
-            font-weight: bold;
-        }
-
-        /* 選擇支線區 */
-        .branch-container {
-            padding: 30px 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .branch-title {
-            text-align: center;
-            font-size: 16px;
-            color: #777;
-            font-weight: bold;
-            letter-spacing: 0.1em;
-            margin-bottom: 5px;
-        }
-
-        /* 關卡選擇卡片 */
-        .branch-card {
-            display: flex;
-            align-items: center;
-            background: white;
-            border-radius: 25px;
-            padding: 20px;
-            text-decoration: none;
-            color: var(--text-dark);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-            border: 1.5px solid #eee;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .branch-card:active {
-            transform: scale(0.97);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
-        }
-
-        .branch-icon {
-            font-size: 35px;
-            margin-right: 20px;
-            background: var(--bg-cream);
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #f0e6d2;
-        }
-
-        .branch-info {
-            flex-grow: 1;
-        }
-
-        .branch-info .date {
-            font-size: 11px;
-            color: var(--primary-red);
-            font-weight: 900;
-            letter-spacing: 0.05em;
-        }
-
-        .branch-info .name {
-            font-size: 17px;
-            font-weight: 800;
-            margin: 4px 0;
-            color: #111;
-        }
-
-        .branch-info .desc {
-            font-size: 12px;
-            color: #777;
-            margin: 0;
-            line-height: 1.4;
-        }
-
-        .arrow-indicator {
-            font-size: 20px;
-            color: #ccc;
-            margin-left: 10px;
-        }
-
-        /* 底部暖心區域 */
-        footer {
-            padding: 30px 20px;
-            text-align: center;
-        }
-
-        .companion-card {
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
-            border: 2px dashed var(--primary-red);
-            color: var(--primary-red);
-            font-weight: bold;
-            font-size: 14px;
-            line-height: 1.8;
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
-<body>
+<body class="text-gray-800 min-h-screen pb-20 select-none">
 
-<div class="phone-container">
-    <header>
-        <div class="avatar-circle">
-            <span style="font-size: 40px;">🌸</span>
+    <header class="bg-mori-dark text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
+        <div>
+            <h1 class="text-xl font-bold tracking-wide"><i class="fa-solid fa-leaf text-green-400 mr-1"></i> 嘉義・皮克敏散步</h1>
+            <p class="text-xs opacity-75">機車一日遊終極大滿貫 V7</p>
         </div>
-        <h1>羽婷的關西大冒險</h1>
-        <p>13旅行社😘 專屬嚮導系統</p>
+        <div class="text-right">
+            <span class="bg-mori-accent text-white text-xs px-2 py-1 rounded-full font-bold">TWD ⇄ JPY</span>
+        </div>
     </header>
 
-    <div class="branch-container">
-        <div class="branch-title">✨ 請選擇冒險支線關卡 ✨</div>
+    <main class="p-4 max-w-md mx-auto">
 
-        <!-- 方案一 (指向 travel.html) -->
-        <a href="travel.html" class="branch-card">
-            <div class="branch-icon">🌱</div>
-            <div class="branch-info">
-                <div class="date">方案一</div>
-                <div class="name">皮克敏冒險地圖</div>
-                <div class="desc">麵包、咖啡、海遊館與晚餐抉擇 🌿</div>
+        <section id="page-plan" class="page-content active space-y-6">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-mori-light">
+                <h2 class="text-lg font-bold text-mori-dark mb-2"><i class="fa-solid fa-motorcycle mr-2"></i>行前備忘與基本資訊</h2>
+                <div class="grid grid-cols-2 gap-2 text-sm text-gray-600">
+                    <div class="bg-mori-light/50 p-2 rounded-lg"><strong>交通方式：</strong>火車站旁租機車</div>
+                    <div class="bg-mori-light/50 p-2 rounded-lg"><strong>重要裝備：</strong>防曬、墨鏡、輕便雨衣</div>
+                    <div class="bg-mori-light/50 p-2 rounded-lg col-span-2"><strong>老玩家秘技：</strong>派任務前先將隊伍更換為最愛的皮克敏，收取限定明信片。</div>
+                </div>
             </div>
-            <div class="arrow-indicator">➡️</div>
-        </a>
 
-        <!-- 方案二 (精準連到 13 妳在 GitHub 上的實體檔名：Katsura-Ji.html) -->
-        <a href="Katsura-Ji.html" class="branch-card">
-            <div class="branch-icon">⛩️</div>
-            <div class="branch-info">
-                <div class="date">方案二</div>
-                <div class="name">勝尾寺 x 箕面之森</div>
-                <div class="desc">必勝不倒翁、大瀑布與梅田血拼 🍁</div>
+            <div class="relative border-l-2 border-mori-wood/30 ml-3 space-y-6">
+                
+                <div class="relative pl-6">
+                    <div class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-mori-wood ring-4 ring-mori-warm"></div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-mori-light">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold text-mori-accent"><i class="fa-regular fa-clock mr-1"></i>09:30 - 10:20</span>
+                            <span class="bg-mori-light text-mori-dark text-xs px-2 py-0.5 rounded">熱身踩點</span>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-900">抵達嘉義 ➔ 租車 ➔ 火車站前拿苗</h3>
+                        <p class="text-sm text-gray-600 mt-1">抵達火車站租好機車後，直接在站旁收下兩個限量金苗！</p>
+                        <div class="mt-2 space-y-1 text-xs text-mori-dark font-medium">
+                            <div>📍 [A] 嘉義文化創意產業園區 (彩繪皮克敏 - 必拿)</div>
+                            <div>📍 [B] 嘉義市立美術館 (美術館 - 畫框)</div>
+                        </div>
+                        <div class="mt-3 flex gap-2">
+                            <a href="https://www.google.com/maps/search/?api=1&query=嘉義文化創意產業園區" target="_blank" class="text-xs bg-mori-light text-mori-dark px-2 py-1 rounded flex items-center gap-1"><i class="fa-solid fa-map-location-dot"></i> 地圖A</a>
+                            <a href="https://www.google.com/maps/search/?api=1&query=嘉義市立美術館" target="_blank" class="text-xs bg-mori-light text-mori-dark px-2 py-1 rounded flex items-center gap-1"><i class="fa-solid fa-map-location-dot"></i> 地圖B</a>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <label class="block text-xs font-bold text-gray-400 mb-1">行程備忘錄</label>
+                            <textarea id="memo-1" oninput="saveMemo(1)" class="w-full text-xs p-2 bg-mori-warm rounded border border-gray-200 focus:outline-none focus:border-mori-dark" rows="1" placeholder="輸入備忘或網址..."></textarea>
+                            <div id="memo-link-1" class="mt-1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative pl-6">
+                    <div class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-mori-wood ring-4 ring-mori-warm"></div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-mori-light">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold text-mori-accent"><i class="fa-regular fa-clock mr-1"></i>10:30 - 11:20</span>
+                            <span class="bg-orange-100 text-orange-700 text-xs px-2 py-0.5 rounded">美食/搶購</span>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-900">黃金時間吃雞肉飯 ➔ 搶購「貓尾巴」</h3>
+                        <p class="text-sm text-gray-600 mt-1">午餐首選免排隊的<strong>阿宏師</strong>或**民主火雞肉飯**。11:10火速前往民族路「貓尾巴麵包店」搶購剛出爐的多口味限量泡芙！</p>
+                        <div class="mt-3 flex gap-2">
+                            <a href="https://www.google.com/maps/search/?api=1&query=阿宏師火雞肉飯" target="_blank" class="text-xs bg-mori-light text-mori-dark px-2 py-1 rounded flex items-center gap-1"><i class="fa-solid fa-utensils"></i> 阿宏師</a>
+                            <a href="https://www.google.com/maps/search/?api=1&query=貓尾巴麵包店" target="_blank" class="text-xs bg-mori-light text-mori-dark px-2 py-1 rounded flex items-center gap-1"><i class="fa-solid fa-cake-candles"></i> 貓尾巴</a>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <label class="block text-xs font-bold text-gray-400 mb-1">行程備忘錄</label>
+                            <textarea id="memo-2" oninput="saveMemo(2)" class="w-full text-xs p-2 bg-mori-warm rounded border border-gray-200 focus:outline-none focus:border-mori-dark" rows="1" placeholder="輸入備忘或網址..."></textarea>
+                            <div id="memo-link-2" class="mt-1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative pl-6">
+                    <div class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-mori-wood ring-4 ring-mori-warm"></div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-mori-light">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold text-mori-accent"><i class="fa-regular fa-clock mr-1"></i>11:20 - 12:30</span>
+                            <span class="bg-mori-light text-mori-dark text-xs px-2 py-0.5 rounded">老街穿梭</span>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-900">外帶在地飲料 ➔ 鎖定 D、E 據點</h3>
+                        <p class="text-sm text-gray-600 mt-1">不想排御香屋，推薦國華街**知更鳥巢**爆量葡萄柚綠，或**榮興茶行**的古早味鍋煮奶茶。</p>
+                        <div class="mt-2 space-y-1 text-xs text-mori-dark font-medium">
+                            <div>📍 [D] 中央第一商場 (服裝店 - 髮圈)</div>
+                            <div>📍 [E] 嘉義文學館:東門町1923 (圖書館)</div>
+                        </div>
+                        <div class="mt-3 flex gap-2">
+                            <a href="https://www.google.com/maps/search/?api=1&query=知更鳥巢鮮果茶飲" target="_blank" class="text-xs bg-mori-light text-mori-dark px-2 py-1 rounded flex items-center gap-1"><i class="fa-solid fa-glass-water"></i> 知更鳥巢</a>
+                            <a href="https://www.google.com/maps/search/?api=1&query=嘉義東門町1923" target="_blank" class="text-xs bg-mori-light text-mori-dark px-2 py-1 rounded flex items-center gap-1"><i class="fa-solid fa-map-location-dot"></i> 東門町</a>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <label class="block text-xs font-bold text-gray-400 mb-1">行程備忘錄</label>
+                            <textarea id="memo-3" oninput="saveMemo(3)" class="w-full text-xs p-2 bg-mori-warm rounded border border-gray-200 focus:outline-none focus:border-mori-dark" rows="1" placeholder="輸入備忘或網址..."></textarea>
+                            <div id="memo-link-3" class="mt-1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative pl-6">
+                    <div class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-mori-wood ring-4 ring-mori-warm"></div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-mori-light">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold text-mori-accent"><i class="fa-regular fa-clock mr-1"></i>12:45 - 15:15</span>
+                            <span class="bg-mori-light text-mori-dark text-xs px-2 py-0.5 rounded">文青消暑</span>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-900">北門檜意森林圈 ➔ 涼製冰所重整 F、G</h3>
+                        <p class="text-sm text-gray-600 mt-1">最熱的午後前往**一涼製冰所**吃泰奶或OREO冰餅退火，順道在日式檜意森活村漫步散心。</p>
+                        <div class="mt-2 space-y-1 text-xs text-mori-dark font-medium">
+                            <div>📍 [F] 嘉義市立博物館 (金色禮物貼紙 - 必拿)</div>
+                            <div>📍 [G] 嘉義實驗木場 (五金行)</div>
+                        </div>
+                        <div class="mt-3 flex gap-2">
+                            <a href="https://www.google.com/maps/search/?api=1&query=嘉義市立博物館" target="_blank" class="text-xs bg-mori-light text-mori-dark px-2 py-1 rounded flex items-center gap-1"><i class="fa-solid fa-map-location-dot"></i> 博物館</a>
+                            <a href="https://www.google.com/maps/search/?api=1&query=一涼製冰所" target="_blank" class="text-xs bg-mori-light text-mori-dark px-2 py-1 rounded flex items-center gap-1"><i class="fa-solid fa-ice-cream"></i> 一涼製</a>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <label class="block text-xs font-bold text-gray-400 mb-1">行程備忘錄</label>
+                            <textarea id="memo-4" oninput="saveMemo(4)" class="w-full text-xs p-2 bg-mori-warm rounded border border-gray-200 focus:outline-none focus:border-mori-dark" rows="1" placeholder="輸入備忘或網址..."></textarea>
+                            <div id="memo-link-4" class="mt-1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative pl-6">
+                    <div class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-mori-wood ring-4 ring-mori-warm"></div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-mori-light">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold text-mori-accent"><i class="fa-regular fa-clock mr-1"></i>15:25 - 16:45</span>
+                            <span class="bg-mori-light text-mori-dark text-xs px-2 py-0.5 rounded">熱血神社</span>
+                        </div>
+                        <h3 class="font-bold text-base text-gray-900">嘉義公園：熱血棒球與和服體驗 H</h3>
+                        <p class="text-sm text-gray-600 mt-1">騎車上山前往嘉義公園解鎖棒球場，接著到「昭和十八J18」神社木造建築群美拍。</p>
+                        <div class="mt-2 space-y-1 text-xs text-mori-dark font-medium">
+                            <div>📍 [H] 嘉義市立棒球場 (體育館皮克敏)</div>
+                        </div>
+                        <div class="mt-3 flex gap-2">
+                            <a href="https://www.google.com/maps/search/?api=1&query=嘉義市立棒球場" target="_blank" class="text-xs bg-mori-light text-mori-dark px-2 py-1 rounded flex items-center gap-1"><i class="fa-solid fa-baseball"></i> 棒球場</a>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <label class="block text-xs font-bold text-gray-400 mb-1">行程備忘錄</label>
+                            <textarea id="memo-5" oninput="saveMemo(5)" class="w-full text-xs p-2 bg-mori-warm rounded border border-gray-200 focus:outline-none focus:border-mori-dark" rows="1" placeholder="輸入備忘或網址..."></textarea>
+                            <div id="memo-link-5" class="mt-1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative pl-6">
+                    <div class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-mori-accent ring-4 ring-mori-warm"></div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-mori-accent/20 ring-1 ring-mori-accent">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs font-bold text-mori-accent"><i class="fa-regular fa-clock mr-1"></i>17:00 - 17:30</span>
+                            <span class="bg-mori-accent text-white text-xs px-2 py-0.5 rounded">最後閃擊</span>
+                        </div>
+                        <h3 class="font-bold text-base text-mori-dark">下山閃擊：文化公園光速解鎖 C</h3>
+                        <p class="text-sm text-gray-600 mt-1">**重要集合/衝刺時間！** 趁傍晚夜市人潮還沒湧進，機車在外圍短暫停留，用手機刷下最後一個苗，完美達成大滿貫！</p>
+                        <div class="mt-2 space-y-1 text-xs text-mori-dark font-medium">
+                            <div>📍 [C] 嘉義文化公園 (公園 - 四葉幸運草)</div>
+                        </div>
+                        <div class="mt-3">
+                            <a href="https://www.google.com/maps/search/?api=1&query=嘉義文化公園" target="_blank" class="text-xs bg-mori-light text-mori-dark px-2 py-1 rounded inline-flex items-center gap-1"><i class="fa-solid fa-map-location-dot"></i> 文化公園</a>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100">
+                            <label class="block text-xs font-bold text-gray-400 mb-1">行程備忘錄</label>
+                            <textarea id="memo-6" oninput="saveMemo(6)" class="w-full text-xs p-2 bg-mori-warm rounded border border-gray-200 focus:outline-none focus:border-mori-dark" rows="1" placeholder="輸入備忘或網址..."></textarea>
+                            <div id="memo-link-6" class="mt-1"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="arrow-indicator">➡️</div>
-        </a>
+        </section>
 
-        <!-- Hotel 飯店周邊指南 (指向 Hotel-Surroundings.html) -->
-        <a href="Hotel-Surroundings.html" class="branch-card">
-            <div class="branch-icon">🏪</div>
-            <div class="branch-info">
-                <div class="date">HOTEL INFO - 飯店周邊</div>
-                <div class="name">Hotel 飯店周邊指南</div>
-                <div class="desc">超商、深夜拉麵、平價壽司與手作咖啡 🍔</div>
+        <section id="page-guide" class="page-content space-y-4">
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-mori-light">
+                <div class="p-6 bg-mori-dark text-white">
+                    <span class="text-xs uppercase tracking-widest text-green-300 font-bold">Spotlight</span>
+                    <h2 class="text-2xl font-serif font-bold mt-1">檜意森活村 & 實驗木場</h2>
+                    <p class="text-xs opacity-75 mt-1">全台保存最完整的日式官舍建築群</p>
+                </div>
+                <div class="p-5 space-y-4 text-sm leading-relaxed text-gray-700">
+                    <p class="first-letter:text-3xl first-letter:font-bold first-letter:text-mori-wood first-letter:mr-1 first-letter:float-left">
+                        嘉義市在日治時期因阿里山林業開發，曾有「木材之城」的美譽。現今的檜意森活村是昔日營林局的官方宿舍。整個園區皆由珍貴的台灣紅檜與扁柏打造，漫步其間能聞到淡淡的木質香氣。
+                    </p>
+                    <blockquote class="border-l-4 border-mori-accent pl-3 italic text-gray-600 bg-mori-light/30 p-2 rounded-r">
+                        💡 <strong>冷知識：</strong>這裡也是知名棒球國片《KANO》中近藤教練宿舍的實際取景拍攝地喔！
+                    </blockquote>
+                    <p>
+                        而緊鄰的「嘉義實驗木場」，更是新一代文青發掘木造工藝結構、結構力學與現代美學融合的實驗秘密基地，非常值得花上1小時細細品味。
+                    </p>
+                    
+                    <div class="rounded-xl overflow-hidden shadow-inner border border-gray-200 mt-4 h-48">
+                        <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=120.452%2C23.484%2C120.459%2C23.489&amp;layer=mapnik&amp;marker=23.4868%2C120.4557" style="border: 0"></iframe>
+                    </div>
+                    <div class="text-center">
+                        <small><a href="https://www.openstreetmap.org/?mlat=23.4868&amp;mlon=120.4557#map=17/23.4868/120.4557" target="_blank" class="text-xs text-mori-wood underline"><i class="fa-solid fa-location-crosshairs mr-1"></i>查看 OpenStreetMap 大地圖</a></small>
+                    </div>
+                </div>
             </div>
-            <div class="arrow-indicator">➡️</div>
-        </a>
-    </div>
+        </section>
 
-    <footer>
-        <div class="companion-card">
-            準備好開啟今天的冒險了嗎？🚀<br>
-            <span style="font-weight: normal; font-size: 13px; color: #666;">
-                點選上方任意關卡，即可解鎖當日無腦導航路線！
-            </span>
-        </div>
-    </footer>
-</div>
+        <section id="page-wallet" class="page-content space-y-4">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-mori-light">
+                <h3 class="text-sm font-bold text-mori-dark mb-2"><i class="fa-solid fa-calculator mr-1"></i> 即時雙幣換算器 (模擬出國)</h3>
+                
+                <div class="grid grid-cols-2 gap-2 mb-3">
+                    <div>
+                        <label class="block text-xs text-gray-400">自訂匯率 (台幣/日幣)</label>
+                        <input type="number" id="fx-rate" value="0.215" step="0.001" class="w-full text-sm p-2 bg-mori-warm rounded border focus:outline-none" oninput="calcExchange()">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400">輸入算式 (e.g. 500+200*3)</label>
+                        <input type="text" id="calc-expr" placeholder="500+200" class="w-full text-sm p-2 bg-mori-warm rounded border focus:outline-none" onkeyup="if(event.key==='Enter') evaluateExpr()">
+                    </div>
+                </div>
+                
+                <button onclick="evaluateExpr()" class="w-full bg-mori-dark text-white py-2 rounded-xl text-xs font-bold tracking-wider active:scale-95 transition-transform">計算並換算</button>
+                
+                <div class="mt-3 grid grid-cols-2 gap-2 text-center pt-2 border-t border-dashed">
+                    <div class="bg-mori-light/40 p-2 rounded">
+                        <span class="block text-xs text-gray-500">日幣總額 (￥)</span>
+                        <span id="res-jpy" class="text-lg font-bold text-mori-dark">0</span>
+                    </div>
+                    <div class="bg-mori-accent/10 p-2 rounded">
+                        <span class="block text-xs text-gray-500">折合台幣 (NT$)</span>
+                        <span id="res-twd" class="text-lg font-bold text-mori-accent">0</span>
+                    </div>
+                </div>
+            </div>
 
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-mori-light">
+                <h3 class="text-sm font-bold text-mori-dark mb-3"><i class="fa-solid fa-pen-to-square mr-1"></i> 新增消費歷史</h3>
+                <div class="space-y-2">
+                    <input type="text" id="bill-item" placeholder="品項名稱 (如：貓尾巴泡芙)" class="w-full text-sm p-2 bg-mori-warm rounded border focus:outline-none">
+                    <input type="number" id="bill-amount" placeholder="金額 (日幣或台幣數值)" class="w-full text-sm p-2 bg-mori-warm rounded border focus:outline-none">
+                    
+                    <div class="flex items-center gap-2">
+                        <label class="flex-1 bg-mori-light text-mori-dark px-3 py-2 rounded-xl text-xs font-bold text-center cursor-pointer active:scale-95 transition-transform">
+                            <i class="fa-solid fa-camera mr-1"></i> 拍照 / 上傳單據
+                            <input type="file" id="bill-img" accept="image/*" class="hidden" onchange="processImage(this)">
+                        </label>
+                        <div id="img-preview" class="w-10 h-10 rounded bg-gray-100 hidden overflow-hidden border"></div>
+                    </div>
+
+                    <button onclick="addBill()" class="w-full bg-mori-wood text-white py-2 rounded-xl text-xs font-bold tracking-wider mt-2 active:scale-95 transition-transform">儲存此筆消費</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-mori-light">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-sm font-bold text-mori-dark"><i class="fa-solid fa-list-check mr-1"></i> 消費紀錄歷史</h3>
+                    <button onclick="clearBills()" class="text-xs text-red-500 underline">清空全部</button>
+                </div>
+                <div id="bill-list" class="space-y-2 max-h-60 overflow-y-auto no-scrollbar">
+                    <p class="text-xs text-gray-400 text-center py-4">目前尚無記帳紀錄</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-lists" class="page-content space-y-4">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-mori-light">
+                <h3 class="text-sm font-bold text-mori-dark mb-3"><i class="fa-solid fa-clipboard-check mr-1"></i> 行前準備與必備清單</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="text-xs font-bold text-mori-accent mb-1">[ 必先申請 ]</h4>
+                        <div id="checklist-app" class="grid grid-cols-1 gap-1 text-sm"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-mori-accent mb-1">[ 隨身攜帶清單 ]</h4>
+                        <div id="checklist-carry" class="grid grid-cols-2 gap-1 text-xs"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-mori-accent mb-1">[ 兒童專屬清單 ]</h4>
+                        <div id="checklist-kids" class="grid grid-cols-2 gap-1 text-xs"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-mori-light">
+                <h3 class="text-sm font-bold text-mori-dark mb-2"><i class="fa-solid fa-note-sticky mr-1"></i> 個人隨手筆記 (支援網址自動轉換)</h3>
+                <textarea id="personal-note" oninput="savePersonalNote()" class="w-full text-xs p-3 bg-mori-warm rounded-xl border border-gray-200 focus:outline-none focus:border-mori-dark" rows="5" placeholder="在此寫下你想記錄的事情或網址連結..."></textarea>
+                <div id="personal-note-links" class="mt-2 space-y-1"></div>
+            </div>
+        </section>
+
+        <section id="page-info" class="page-content space-y-4">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-mori-light space-y-4">
+                <div>
+                    <h3 class="text-sm font-bold text-mori-dark mb-1"><i class="fa-solid fa-cloud-sun mr-1"></i> 當地即時天氣預報</h3>
+                    <p class="text-xs text-gray-500 mb-2">出發前別忘了查看最新氣象動態調整防曬與雨具：</p>
+                    <a href="https://www.cwa.gov.tw/V8/C/W/County/County.html?CID=10020" target="_blank" class="inline-flex items-center gap-2 text-xs bg-mori-light text-mori-dark px-3 py-2 rounded-xl font-bold"><i class="fa-solid fa-umbrella"></i> 交通部中央氣象署 - 嘉義市天氣</a>
+                </div>
+
+                <hr class="border-gray-100">
+
+                <div>
+                    <h3 class="text-sm font-bold text-mori-dark mb-1"><i class="fa-solid fa-phone-flip mr-1"></i> 緊急聯絡資訊</h3>
+                    <ul class="text-xs text-gray-600 space-y-1">
+                        <li><strong>報案/警政：</strong> 110</li>
+                        <li><strong>救護車/消防：</strong> 119</li>
+                        <li><strong>嘉義市旅客服務中心：</strong> (05) 225-4141</li>
+                    </ul>
+                </div>
+
+                <hr class="border-gray-100">
+
+                <div>
+                    <h3 class="text-sm font-bold text-mori-dark mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> 旅遊禁忌與注意事項</h3>
+                    <ul class="text-xs text-gray-600 list-disc list-inside space-y-1">
+                        <li><strong>古蹟保護：</strong> 嘉義文學館與昭和十八均為珍貴木造歷史建築，室內嚴禁吸菸與奔跑。</li>
+                        <li><strong>機車停放：</strong> 中央第一商場與文化公園周邊巷弄狹窄，請嚴格遵守現場停放指示，切勿違停造成在地人困擾。</li>
+                        <li><strong>皮克敏挑戰：</strong> 進入限定範圍滑動即可觸發，切勿邊騎機車邊看手機，注意行車安全！</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 max-w-md mx-auto flex justify-around py-2 text-gray-400">
+        <button onclick="switchTab('plan')" id="nav-plan" class="flex flex-col items-center gap-0.5 text-mori-dark font-medium">
+            <i class="fa-solid fa-calendar-day text-lg"></i>
+            <span class="text-[10px]">PLAN</span>
+        </button>
+        <button onclick="switchTab('guide')" id="nav-guide" class="flex flex-col items-center gap-0.5">
+            <i class="fa-solid fa-book-open text-lg"></i>
+            <span class="text-[10px]">GUIDE</span>
+        </button>
+        <button onclick="switchTab('wallet')" id="nav-wallet" class="flex flex-col items-center gap-0.5">
+            <i class="fa-solid fa-wallet text-lg"></i>
+            <span class="text-[10px]">WALLET</span>
+        </button>
+        <button onclick="switchTab('lists')" id="nav-lists" class="flex flex-col items-center gap-0.5">
+            <i class="fa-solid fa-list-ul text-lg"></i>
+            <span class="text-[10px]">LISTS</span>
+        </button>
+        <button onclick="switchTab('info')" id="nav-info" class="flex flex-col items-center gap-0.5">
+            <i class="fa-solid fa-circle-info text-lg"></i>
+            <span class="text-[10px]">INFO</span>
+        </button>
+    </nav>
+
+    <script>
+        // 1. 分頁切換功能
+        function switchTab(tabName) {
+            document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`page-${tabName}`).classList.add('active');
+
+            // 更改導航按鈕顏色
+            const navButtons = document.querySelectorAll('nav button');
+            navButtons.forEach(btn => btn.classList.remove('text-mori-dark', 'font-medium'));
+            document.getElementById(`nav-${tabName}`).classList.add('text-mori-dark', 'font-medium');
+            
+            // 每次切換自動滑回頂部
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // 2. 網址偵測與轉換器
+        function detectUrls(text) {
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.match(urlRegex) || [];
+        }
+
+        function updateLinkButton(memoId, text) {
+            const container = document.getElementById(`memo-link-${memoId}`);
+            if (!container) return;
+            container.innerHTML = '';
+            const urls = detectUrls(text);
+            urls.forEach(url => {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.className = "inline-flex items-center gap-1 text-[10px] bg-mori-wood text-white px-2 py-0.5 rounded mt-1 mr-1";
+                btn.innerHTML = `<i class="fa-solid fa-link"></i> 開啟連結`;
+                container.appendChild(btn);
+            });
+        }
+
+        // 3. 行程備忘錄 LocalStorage 儲存
+        function saveMemo(id) {
+            const text = document.getElementById(`memo-${id}`).value;
+            localStorage.setItem(`chiayi-memo-${id}`, text);
+            updateLinkButton(id, text);
+        }
+
+        function loadMemos() {
+            for(let i=1; i<=6; i++) {
+                const saved = localStorage.getItem(`chiayi-memo-${i}`);
+                if(saved) {
+                    const textarea = document.getElementById(`memo-${i}`);
+                    if(textarea) {
+                        textarea.value = saved;
+                        updateLinkButton(i, saved);
+                    }
+                }
+            }
+        }
+
+        // 4. 個人隨手筆記儲存
+        function savePersonalNote() {
+            const text = document.getElementById('personal-note').value;
+            localStorage.setItem('chiayi-personal-note', text);
+            
+            const container = document.getElementById('personal-note-links');
+            container.innerHTML = '';
+            const urls = detectUrls(text);
+            urls.forEach(url => {
+                const btn = document.createElement('a');
+                btn.href = url;
+                btn.target = '_blank';
+                btn.className = "inline-flex items-center gap-1 text-xs bg-mori-dark text-white px-3 py-1 rounded-lg mt-1 mr-1 shadow-sm";
+                btn.innerHTML = `<i class="fa-solid fa-location-arrow"></i> 捷徑連結`;
+                container.appendChild(btn);
+            });
+        }
+
+        // 5. 匯率與計算機運算
+        function evaluateExpr() {
+            const expr = document.getElementById('calc-expr').value;
+            try {
+                // 使用 Function 代替 eval 進行基礎安全算式計算
+                const result = new Function(`return (${expr})`)();
+                if(typeof result === 'number' && !isNaN(result)) {
+                    document.getElementById('res-jpy').innerText = Math.round(result).toLocaleString();
+                    calcExchange(result);
+                } else {
+                    alert('算式格式不正確哦');
+                }
+            } catch (e) {
+                alert('請輸入正確的數學算式，例如：500+200*3');
+            }
+        }
+
+        function calcExchange(customJPY = null) {
+            const rate = parseFloat(document.getElementById('fx-rate').value) || 0.215;
+            let jpy = customJPY;
+            if(jpy === null) {
+                const expr = document.getElementById('calc-expr').value;
+                try { jpy = new Function(`return (${expr})`)() || 0; } catch(e) { jpy = 0; }
+            }
+            const twd = Math.round(jpy * rate);
+            document.getElementById('res-twd').innerText = twd.toLocaleString();
+        }
+
+        // 6. 記帳相片 Canvas 壓縮與轉換 (修正手誤：使用 2d 渲染上下文)
+        let currentBase64Img = "";
+        function processImage(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const max_size = 120; // 壓縮成微縮圖，極大省空間
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > max_size) {
+                            height *= max_size / width;
+                            width = max_size;
+                        }
+                    } else {
+                        if (height > max_size) {
+                            width *= max_size / height;
+                            height = max_size;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    // 修正手誤：使用正確的 '2d' 渲染上下文
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    currentBase64Img = canvas.toDataURL('image/jpeg', 0.6); // 壓縮品質 0.6
+                    const preview = document.getElementById('img-preview');
+                    preview.innerHTML = `<img src="${currentBase64Img}" class="w-full h-full object-cover">`;
+                    preview.classList.remove('hidden');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 7. 記帳列表模組
+        function addBill() {
+            const item = document.getElementById('bill-item').value.trim();
+            const amt = parseFloat(document.getElementById('bill-amount').value) || 0;
+            const rate = parseFloat(document.getElementById('fx-rate').value) || 0.215;
+
+            if(!item || amt <= 0) {
+                alert('請完整輸入消費品項與金額唷！');
+                return;
+            }
+
+            const bill = {
+                id: Date.now(),
+                item: item,
+                jpy: amt,
+                twd: Math.round(amt * rate),
+                img: currentBase64Img
+            };
+
+            let bills = JSON.parse(localStorage.getItem('chiayi-bills')) || [];
+            bills.unshift(bill); // 最新紀錄排在最前面
+            localStorage.setItem('chiayi-bills', JSON.stringify(bills));
+
+            // 重設輸入表單
+            document.getElementById('bill-item').value = "";
+            document.getElementById('bill-amount').value = "";
+            document.getElementById('bill-img').value = "";
+            document.getElementById('img-preview').classList.add('hidden');
+            currentBase64Img = "";
+
+            renderBills();
+        }
+
+        // 修正：渲染記帳歷史清單
+        function renderBills() {
+            const container = document.getElementById('bill-list');
+            const bills = JSON.parse(localStorage.getItem('chiayi-bills')) || [];
+            
+            if(bills.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">目前尚無記帳紀錄</p>`;
+                return;
+            }
+
+            container.innerHTML = bills.map(b => `
+                <div class="flex items-center justify-between p-2 bg-mori-warm rounded-xl border border-gray-100 text-xs">
+                    <div class="flex items-center gap-2">
+                        ${b.img ? `<img src="${b.img}" class="w-8 h-8 rounded object-cover border">` : `<div class="w-8 h-8 rounded bg-mori-light flex items-center justify-center text-mori-dark"><i class="fa-solid fa-receipt"></i></div>`}
+                        <div>
+                            <div class="font-bold text-gray-900">${b.item}</div>
+                            <div class="text-[10px] text-gray-400">￥${b.jpy.toLocaleString()}</div>
+                        </div>
+                    </div>
+                    <div class="text-right flex items-center gap-2">
+                        <span class="font-bold text-mori-accent">NT$ ${b.twd.toLocaleString()}</span>
+                        <button onclick="deleteBill(${b.id})" class="text-gray-300 hover:text-red-500 p-1"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteBill(id) {
+            let bills = JSON.parse(localStorage.getItem('chiayi-bills')) || [];
+            bills = bills.filter(b => b.id !== id);
+            localStorage.setItem('chiayi-bills', JSON.stringify(bills));
+            renderBills();
+        }
+
+        function clearBills() {
+            if(confirm('確定要清除所有消費紀錄嗎？')) {
+                localStorage.removeItem('chiayi-bills');
+                renderBills();
+            }
+        }
+
+        // 8. 靜態必備清單渲染與勾選狀態保存
+        const listData = {
+            app: ["旅遊平安不便險投保", "Visit Japan Web 填寫確認"],
+            carry: ["護照正本", "駕照正本", "日文駕照譯本", "個人藥品與維他命", "防曬乳", "海外回饋信用卡", "外幣現金", "行動電源", "相機與記憶卡", "充電線/快充頭", "手持電風扇", "雨傘/輕便雨衣", "衣物收納袋", "壓縮袋", "隨身小枕頭", "指甲剪", "個人盥洗用品(牙刷牙膏)", "防水拖鞋/涼鞋", "機上舒適眼罩"],
+            kids: ["尿布", "全效濕紙巾", "兒童隨身水壺", "日用吸鼻器", "精準耳溫槍"]
+        };
+
+        function initCheckLists() {
+            setupCheckList('checklist-app', listData.app, 'app');
+            setupCheckList('checklist-carry', listData.carry, 'carry');
+            setupCheckList('checklist-kids', listData.kids, 'kids');
+        }
+
+        function setupCheckList(containerId, dataArray, prefix) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = dataArray.map((item, idx) => {
+                const key = `check-${prefix}-${idx}`;
+                const checked = localStorage.getItem(key) === 'true' ? 'checked' : '';
+                return `
+                    <label class="flex items-start gap-2 p-1.5 hover:bg-mori-light/30 rounded cursor-pointer transition-colors">
+                        <input type="checkbox" id="${key}" ${checked} onchange="saveCheckState('${key}')" class="mt-0.5 rounded text-mori-dark focus:ring-mori-dark border-gray-300">
+                        <span class="text-xs text-gray-700">${item}</span>
+                    </label>
+                `;
+            }).join('');
+        }
+
+        function saveCheckState(key) {
+            const checkbox = document.getElementById(key);
+            localStorage.setItem(key, checkbox.checked);
+        }
+
+        // 頁面初始化載入
+        window.onload = function() {
+            loadMemos();
+            initCheckLists();
+            renderBills();
+            
+            // 載入隨手個人筆記
+            const savedNote = localStorage.getItem('chiayi-personal-note');
+            if(savedNote) {
+                document.getElementById('personal-note').value = savedNote;
+                savePersonalNote();
+            }
+        };
+    </script>
 </body>
 </html>
-
