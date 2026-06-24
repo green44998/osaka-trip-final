@@ -84,7 +84,7 @@
             document.getElementById('status-text').innerText = `定位成功！當先座標: ${uLat.toFixed(4)}, ${uLng.toFixed(4)}`;
 
             // 更新地圖視角到使用者位置
-            map.setView([uLat, uLng], 16);
+            map.setView([uLat, uLng], 12);
 
             // 繪製或更新使用者藍色圓點
             if (userMarker) {
