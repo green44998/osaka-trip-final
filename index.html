@@ -92,7 +92,7 @@
                 userCircle.setLatLng([uLat, uLng]);
             } else {
                 userMarker = L.marker([uLat, uLng]).addTo(map).bindPopup("您的位置").openPopup();
-                userCircle = L.circle([uLat, uLng], { color: '#007bff', fillColor: '#007bff', fillOpacity: 0.15, radius: 500 }).addTo(map);
+                userCircle = L.circle([uLat, uLng], { color: '#007bff', fillColor: '#007bff', fillOpacity: 0.15, radius: 10000 }).addTo(map);
             }
 
             // 清空舊的列表
