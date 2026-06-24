@@ -141,5 +141,29 @@
             document.getElementById('status-text').innerText = "定位失敗，請確保手機已開啟內建 GPS 並允許網頁定位權限。";
         }
     </script>
+    // 當網頁抓到你的定位 (uLat, uLng) 後，自動組裝出一個給 OSM 的「查詢語法」
+const bbox = `${uLat - 0.05},${uLng - 0.05},${uLat + 0.05},${uLng + 0.05}`; // 算出方圓大約 10 公里的經緯度格子
+
+// 告訴 OSM：請把這個格子內，所有屬於「公共藝術、紀念碑、噴水池、宗教場所」的點通通交出來！
+const overpassQuery = `
+    [out:json][timeout:25];
+    (
+      node["tourism"="artwork"](${bbox});
+      node["historic"="monument"](${bbox});
+      node["amenity"="place_of_worship"](${bbox});
+    );
+    out body;
+`;
+
+// 網頁直接用 fetch 發送給全球公開伺服器
+fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`)
+  .then(response => response.json())
+  .then(data => {
+      // 網頁拿到成百上千個點位，全自動在地圖上插旗！
+      data.elements.forEach(spot => {
+          L.marker([spot.lat, spot.lon]).addTo(map).bindPopup(`<b>${spot.tags.name || '未命名據點'}</b>`);
+      });
+  });
+
 </body>
 </html>
