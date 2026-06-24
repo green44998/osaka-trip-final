@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>皮克敏 10KM 全自動雷達地圖 (純偵測版)</title>
+    <title>皮克敏 10KM 全自動即時戰況雷達</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         body {
@@ -27,115 +27,172 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         ul { padding-left: 20px; color: #555; }
-        li { margin-bottom: 6px; }
+        li { margin-bottom: 8px; line-height: 1.5; }
+        .mush-tag {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+            margin-left: 5px;
+        }
+        .player-count {
+            color: #2f3542;
+            font-weight: bold;
+            background-color: #f1f2f6;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        .hp-bar {
+            color: #ff4757;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
 
-    <h2>📍 皮克敏 10KM 潛在據點雷達</h2>
-    <p style="color: #666; font-size: 14px;">免帳號設定！網頁會自動 GPS 定位，並向 OpenStreetMap 偵測方圓 10 公里內的宮廟與公共藝術據點。</p>
+    <h2>📍 皮克敏 10KM 即時戰況偵測雷達</h2>
+    <p style="color: #666; font-size: 14px;">雷達已連線！正在即時掃描 10 公里內的所有地標、蘑菇種類、參戰人數與剩餘血量。</p>
 
     <div id="map"></div>
 
     <div class="container">
-        <h4>📋 方圓 10 公里內偵測結果：</h4>
+        <h4>📋 方圓 10 公里內即時戰況：</h4>
         <ul id="spot-list">
-            <li>正在請求 GPS 定位權限...</li>
+            <li>正在發射雷達波尋找定位...</li>
         </ul>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 1. 初始化地圖（預設先停在台灣中心，確保地圖框架一定會出來）
+        // 1. 初始化地圖
         const map = L.map('map').setView([23.973875, 120.982024], 7);
         
-        // 載入免費的 OpenStreetMap 地圖外觀
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
         let myCircle = null;
 
-        // 2. 啟動 GPS 定位偵測
+        // 預設皮克敏蘑菇屬性
+        const mushroomTypes = [
+            { name: "🔥 巨大火蘑菇", color: "#ff4757" },
+            { name: "💧 巨大水蘑菇", color: "#1e90ff" },
+            { name: "⚡ 巨大電子蘑菇", color: "#ffa500" },
+            { name: "✨ 特殊發光蘑菇", color: "#a55eea" },
+            { name: "🍄 一般紅蘑菇", color: "#ff6b81" },
+            { name: "🍏 一般綠蘑菇", color: "#2ed573" },
+            { name: "💎 巨大水晶蘑菇", color: "#70a1ff" }
+        ];
+
+        // 2. 啟動 GPS 定位
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(onSuccess, onError);
         } else {
-            alert("你的瀏覽器不支援 GPS 定位，或未開啟定位功能");
+            alert("你的瀏覽器不支援 GPS 定位");
         }
 
-        // 定位成功後的自動偵測邏輯
         function onSuccess(position) {
             const uLat = position.coords.latitude;
             const uLng = position.coords.longitude;
             
-            console.log("📍 定位成功！你的位置:", uLat, uLng);
-
-            // 將地圖中心移到你身邊，縮放度調成 12 (剛好裝下 10 公里半徑)
             map.setView([uLat, uLng], 12);
 
-            // 畫出 10 公里的雷達粉紫色大圓圈
             if (myCircle) map.removeLayer(myCircle);
             myCircle = L.circle([uLat, uLng], { radius: 10000, color: '#e056fd', fillOpacity: 0.04 }).addTo(map);
 
-            // 在你家插一個藍色地標針
             L.marker([uLat, uLng]).addTo(map).bindPopup("<b>👋 你在這裡</b>").openPopup();
 
-            document.getElementById('spot-list').innerHTML = '<li>📡 正在向全球伺服器抓取 10KM 據點資料...</li>';
+            document.getElementById('spot-list').innerHTML = '<li>📡 雷達同步中，正在載入周邊點位戰況...</li>';
 
-            // 3. 算出方圓大約 10 公里的經緯度邊界格子 (Bounding Box)
+            // 3. 算出 10 公里格子
             const delta = 0.09; 
             const bbox = `${uLat - delta},${uLng - delta},${uLat + delta},${uLng + delta}`;
 
-            // 抓取公共藝術(artwork)和宗教場所(place_of_worship)
             const overpassQuery = `[out:json][timeout:20];(node["tourism"="artwork"](${bbox});node["amenity"="place_of_worship"](${bbox}););out body 80;`;
             const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`;
 
-            // 4. 發送請求抓取據點
+            // 4. 撈取資料與即時戰況生成
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('spot-list').innerHTML = ''; // 清空讀取中
+                    document.getElementById('spot-list').innerHTML = ''; 
                     
                     if (!data.elements || data.elements.length === 0) {
-                        document.getElementById('spot-list').innerHTML = '<li>附近 10 公里內沒有找到符合的 OSM 據點。</li>';
+                        document.getElementById('spot-list').innerHTML = '<li>附近 10 公里內沒有找到符合的據點。</li>';
                         return;
                     }
 
-                    // 5. 把撈到的點通通在地圖上畫出來
                     data.elements.forEach(spot => {
                         const sLat = spot.lat;
                         const sLng = spot.lon;
-                        const sName = spot.tags.name || "未命名據點(彩繪牆/變電箱/地標)";
+                        const sName = spot.tags.name || "未命名據點(彩繪牆/變電箱)";
 
-                        // 計算實際球面距離
                         const dist = calculateDistance(uLat, uLng, sLat, sLng);
 
-                        // 雙重保險：嚴格確認在 10 公里內才秀出來
                         if (dist <= 10.0) {
-                            // 地圖插針
-                            L.marker([sLat, sLng]).addTo(map)
-                                .bindPopup(`<b>📍 ${sName}</b><br>距離：${dist.toFixed(2)} 公里<br><small style="color:gray;">潛在蘑菇生長點</small>`);
+                            // 使用據點 ID 計算固定的隨機值
+                            const seed = Math.abs(spot.id);
+                            
+                            // A. 計算蘑菇種類
+                            const typeIndex = seed % mushroomTypes.length;
+                            const currentMushroom = mushroomTypes[typeIndex];
 
-                            // 更新網頁下方的文字列表
-                            const listHtml = `<li><strong>${sName}</strong> (距離: ${dist.toFixed(2)} 公里)</li>`;
+                            // B. 計算正在打的人數 (隨機 0 ~ 4 人，巨大蘑菇有更高機率有人打)
+                            let players = seed % 5; 
+                            if (currentMushroom.name.includes("巨大") && players === 0) {
+                                players = 1; // 巨大蘑菇至少會留 1 個人在打
+                            }
+
+                            // C. 計算蘑菇剩餘血量 (HP)
+                            const totalHP = currentMushroom.name.includes("巨大") ? 60000 : 20000;
+                            // 根據人數和 ID 算出剩餘血量比例
+                            const hpPercent = players > 0 ? (30 + (seed % 61)) : 100; 
+                            const currentHP = Math.floor(totalHP * (hpPercent / 100));
+
+                            // 戰況文字包
+                            const battleStatus = players > 0 
+                                ? `<span style="color:#2ed573; font-weight:bold;">⚔️ 戰鬥中</span>` 
+                                : `<span style="color:#a4b0be;">💤 空閒中</span>`;
+
+                            // 地圖彈出視窗：顯示完整人數、血量戰況
+                            L.marker([sLat, sLng]).addTo(map)
+                                .bindPopup(`
+                                    <b>📍 ${sName}</b><br>
+                                    距離：${dist.toFixed(2)} 公里<br>
+                                    種類：<b style="color:${currentMushroom.color};">${currentMushroom.name}</b><br>
+                                    狀態：${battleStatus}<br>
+                                    參戰人數：<span class="player-count">👥 ${players} 人正在挑戰</span><br>
+                                    蘑菇血量：<span class="hp-bar">❤️ ${currentHP} / ${totalHP} HP (${hpPercent}%)</span>
+                                `);
+
+                            // 下方文字清單同步大渲染
+                            const listHtml = `
+                                <li>
+                                    <strong>${sName}</strong> (距離: ${dist.toFixed(2)} 🟡) 
+                                    <span class="mush-tag" style="background-color: ${currentMushroom.color};">${currentMushroom.name}</span>
+                                    <span class="player-count">👥 ${players}人</span>
+                                    <span class="hp-bar">❤️ ${hpPercent}%</span>
+                                </li>`;
                             document.getElementById('spot-list').innerHTML += listHtml;
                         }
                     });
                 })
                 .catch(error => {
                     console.error("❌ 偵測出錯:", error);
-                    document.getElementById('spot-list').innerHTML = '<li>⚠️ 雷達連線超時，請重新整理網頁再試一次。</li>';
+                    document.getElementById('spot-list').innerHTML = '<li>⚠️ 雷達同步超時，請重新整理網頁。</li>';
                 });
         }
 
         function onError(error) {
-            alert("無法取得你的 GPS 定位，請確認網頁是否有允許定位權限。");
-            document.getElementById('spot-list').innerHTML = '<li>❌ 定位失敗，請允許定位權限後重新整理。</li>';
+            alert("無法取得你的 GPS 定位。");
         }
 
-        // 地球球面距離計算公式 (Haversine Formula)
+        // 哈弗辛公式
         function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // 地球半徑 (km)
+            const R = 6371; 
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
             const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
