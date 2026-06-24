@@ -140,8 +140,7 @@
         function handleError(err) {
             document.getElementById('status-text').innerText = "定位失敗，請確保手機已開啟內建 GPS 並允許網頁定位權限。";
         }
-    </script>
-    // 當網頁抓到你的定位 (uLat, uLng) 後，自動組裝出一個給 OSM 的「查詢語法」
+        // 當網頁抓到你的定位 (uLat, uLng) 後，自動組裝出一個給 OSM 的「查詢語法」
 const bbox = `${uLat - 0.05},${uLng - 0.05},${uLat + 0.05},${uLng + 0.05}`; // 算出方圓大約 10 公里的經緯度格子
 
 // 告訴 OSM：請把這個格子內，所有屬於「公共藝術、紀念碑、噴水池、宗教場所」的點通通交出來！
@@ -165,5 +164,6 @@ fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpas
       });
   });
 
+    </script>
 </body>
 </html>
