@@ -155,7 +155,7 @@ const overpassQuery = `
 `;
 
 // 網頁直接用 fetch 發送給全球公開伺服器
-fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`)
+fetch(`http://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`)
   .then(response => response.json())
   .then(data => {
       // 網頁拿到成百上千個點位，全自動在地圖上插旗！
