@@ -3,227 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>皮克敏蘑菇據點偵測雷達</title>
-    <!-- 引入 Leaflet 地圖 CSS -->
+    <title>皮克敏 10KM 全自動雷達地圖 (純偵測版)</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f7f9fa; }
-        #map { height: 60vh; width: 100vw; }
-        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
-        .btn-detect { width: 100%; background: #28a745; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 8px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s; }
-        .btn-detect:active { transform: scale(0.98); }
-        .info-panel { margin-top: 15px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .spot-list { margin-top: 10px; padding: 0; list-style: none; max-height: 20vh; overflow-y: auto; }
-        .spot-item { padding: 8px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; font-size: 14px; }
-        .spot-distance { color: #666; font-weight: bold; }
+        body {
+            margin: 0;
+            padding: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f7;
+        }
+        h2 { color: #333; margin-bottom: 5px; }
+        #map {
+            width: 100%;
+            height: 500px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+        }
+        .container {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        ul { padding-left: 20px; color: #555; }
+        li { margin-bottom: 6px; }
     </style>
 </head>
 <body>
 
-    <!-- 地圖顯示區域 -->
+    <h2>📍 皮克敏 10KM 潛在據點雷達</h2>
+    <p style="color: #666; font-size: 14px;">免帳號設定！網頁會自動 GPS 定位，並向 OpenStreetMap 偵測方圓 10 公里內的宮廟與公共藝術據點。</p>
+
     <div id="map"></div>
 
     <div class="container">
-        <button class="btn-detect" onclick="startDetection()">⚡ 自動偵測附近蘑菇點</button>
-
-        <div class="info-panel">
-            <h3 style="margin-top:0; color:#333;">📡 偵測狀態</h3>
-            <p id="status-text">請點擊上方按鈕開啟定位偵測...</p>
-            
-            <h4 style="margin-bottom:5px; color:#555;">📍 附近潛在據點列表 (10公里內)</h4>
-            <ul id="spot-list" class="spot-list">
-                <!-- 偵測到的點位會自動塞進這裡 -->
-            </ul>
-        </div>
+        <h4>📋 方圓 10 公里內偵測結果：</h4>
+        <ul id="spot-list">
+            <li>正在請求 GPS 定位權限...</li>
+        </ul>
     </div>
 
-    <!-- 引入 Leaflet 地圖 JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 1. 初始化地圖 (預設中心定在台灣中部)
-        const map = L.map('map').setView([24.1477, 120.6736], 13);
+        // 1. 初始化地圖（預設先停在台灣中心，確保地圖框架一定會出來）
+        const map = L.map('map').setView([23.973875, 120.982024], 7);
+        
+        // 載入免費的 OpenStreetMap 地圖外觀
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
+            attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        let userMarker = null;
-        let userCircle = null;
+        let myCircle = null;
 
-        // 2. 模擬的全台 Ingress/皮克敏地標資料庫 (實際開發時改由 Firebase 讀取)
-        // 這裡先塞幾個模擬的台灣街頭著名景點作為據點
-        const globalMushroomDatabase = [
-            { id: 1, name: "美村路綠園道地標", lat: 24.1485, lng: 120.6635 },
-            { id: 2, name: "勤美誠品正門裝置藝術", lat: 24.1512, lng: 120.6639 },
-            { id: 3, name: "台中市民廣場大草皮", lat: 24.1495, lng: 120.6620 },
-            { id: 4, name: "審計新村入口導覽牌", lat: 24.1442, lng: 120.6625 },
-            { id: 5, name: "彰化火車站前雕像", lat: 24.0815, lng: 120.5385 },
-            { id: 6, name: "八卦山大佛風景區", lat: 24.0792, lng: 120.5490 }
-        ];
-
-        // 3. 啟動自動偵測
-        function startDetection() {
-            document.getElementById('status-text').innerText = "正在透過瀏覽器搜尋您的 GPS 定位...";
-            
-            if (navigator.geolocation) {
-                // 使用 watchPosition 可以讓玩家移動時，網頁「自動即時追蹤」
-                navigator.geolocation.watchPosition(processLocation, handleError, {
-                    enableHighAccuracy: true, // 強制開啟高精準度 (GPS)
-                    timeout: 10000
-                });
-            } else {
-                alert("您的裝置不支援地理定位。");
-            }
+        // 2. 啟動 GPS 定位偵測
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        } else {
+            alert("你的瀏覽器不支援 GPS 定位，或未開啟定位功能");
         }
 
-        // 4. 核心：處理定位並自動計算周圍蘑菇點
+        // 定位成功後的自動偵測邏輯
         function onSuccess(position) {
-    const uLat = position.coords.latitude;
-    const uLng = position.coords.longitude;
-    
-    // 【測試點 1】看有沒有成功抓到手機定位
-    console.log("📍 定位成功！你的座標是:", uLat, uLng);
-
-    // 畫地圖與圓圈
-    map.setView([uLat, uLng], 12);
-    if (myCircle) map.removeLayer(myCircle);
-    myCircle = L.circle([uLat, uLng], { radius: 10000, color: '#e056fd', fillOpacity: 0.05 }).addTo(map);
-
-    document.getElementById('spot-list').innerHTML = '';
-
-    // 設定大約 10 公里的邊界
-    const delta = 0.09; 
-    const bbox = `${uLat - delta},${uLng - delta},${uLat + delta},${uLng + delta}`;
-
-    // 這次改用最簡單、絕對不會被伺服器拒絕的關鍵字（只抓土地公廟、宮廟等宗教場所）
-    const overpassQuery = `[out:json][timeout:15];node["amenity"="place_of_worship"](${bbox});out body 50;`;
-    const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`;
-
-    console.log("📡 正在發送請求到網址:", url);
-
-    // 【測試點 2】直接用 fetch 抓資料
-    fetch(url)
-        .then(response => {
-            console.log("📥 伺服器有回應了！狀態碼:", response.status);
-            return response.json();
-        })
-        .then(data => {
-            // 【測試點 3】看抓到了幾個點
-            console.log("🔍 伺服器回傳的原始資料點數:", data.elements ? data.elements.length : 0);
-            alert(`成功抓到 ${data.elements.length} 個點！`); // 直接彈出視窗
-
-            if (!data.elements || data.elements.length === 0) {
-                document.getElementById('spot-list').innerHTML = '<li>附近的宮廟據點數量為 0</li>';
-                return;
-            }
-
-            data.elements.forEach(spot => {
-                const sLat = spot.lat;
-                const sLng = spot.lon;
-                const sName = spot.tags.name || "未命名據點";
-
-                // 【關鍵卡點防線】強制先在地圖上畫出來，不管距離公式對不對！
-                L.marker([sLat, sLng]).addTo(map).bindPopup(`<b>📍 ${sName}</b>`);
-
-                // 計算距離
-                const dist = calculateDistance(uLat, uLng, sLat, sLng);
-                console.log(`點位: ${sName}, 計算距離: ${dist} 公里`);
-
-                const listHtml = `<li><strong>${sName}</strong> (距離: ${dist.toFixed(2)} 公里)</li>`;
-                document.getElementById('spot-list').innerHTML += listHtml;
-            });
-        })
-        .catch(error => {
-            // 【測試點 4】看是不是網路被擋
-            console.error("❌ 網路請求大爆炸，原因:", error);
-            alert("網路請求失敗，請看 F12 Console 錯誤訊息");
-        });
-}
-
+            const uLat = position.coords.latitude;
+            const uLng = position.coords.longitude;
             
-            document.getElementById('status-text').innerText = `定位成功！當先座標: ${uLat.toFixed(4)}, ${uLng.toFixed(4)}`;
+            console.log("📍 定位成功！你的位置:", uLat, uLng);
 
-            // 更新地圖視角到使用者位置
+            // 將地圖中心移到你身邊，縮放度調成 12 (剛好裝下 10 公里半徑)
             map.setView([uLat, uLng], 12);
 
-            // 繪製或更新使用者藍色圓點
-            if (userMarker) {
-                userMarker.setLatLng([uLat, uLng]);
-                userCircle.setLatLng([uLat, uLng]);
-            } else {
-                userMarker = L.marker([uLat, uLng]).addTo(map).bindPopup("您的位置").openPopup();
-                userCircle = L.circle([uLat, uLng], { color: '#007bff', fillColor: '#007bff', fillOpacity: 0.15, radius: 10000 }).addTo(map);
-            }
+            // 畫出 10 公里的雷達粉紫色大圓圈
+            if (myCircle) map.removeLayer(myCircle);
+            myCircle = L.circle([uLat, uLng], { radius: 10000, color: '#e056fd', fillOpacity: 0.04 }).addTo(map);
 
-            // 清空舊的列表
-            const listEl = document.getElementById('spot-list');
-            listEl.innerHTML = "";
+            // 在你家插一個藍色地標針
+            L.marker([uLat, uLng]).addTo(map).bindPopup("<b>👋 你在這裡</b>").openPopup();
 
-            // 自動篩選 500 公尺 (0.5 km) 內的點位
-            globalMushroomDatabase.forEach(spot => {
-                const distance = getDistance(uLat, uLng, spot.lat, spot.lng);
-                
-                if (distance <= 10.0) { // 單位是公里
-                    // 1. 在地圖上插上紅色蘑菇預期點的針
-                    L.marker([spot.lat, spot.lng], {
-                        icon: L.icon({
-                            iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
-                            iconSize: [32, 32]
-                        })
-                    }).addTo(map).bindPopup(`<b>${spot.name}</b><br>距離你: ${(distance*1000).toFixed(0)} 公尺`);
+            document.getElementById('spot-list').innerHTML = '<li>📡 正在向全球伺服器抓取 10KM 據點資料...</li>';
 
-                    // 2. 自動塞進下方的文字列表
-                    const li = document.createElement('li');
-                    li.className = 'spot-item';
-                    li.innerHTML = `<span>🍄 ${spot.name}</span> <span class="spot-distance">${(distance*1000).toFixed(0)}m</span>`;
-                    listEl.appendChild(li);
-                }
-            });
+            // 3. 算出方圓大約 10 公里的經緯度邊界格子 (Bounding Box)
+            const delta = 0.09; 
+            const bbox = `${uLat - delta},${uLng - delta},${uLat + delta},${uLng + delta}`;
 
-            if(listEl.children.length === 0) {
-                listEl.innerHTML = "<li class='spot-item'>方圓 500m 內查無模擬據點，請試著移動位置。</li>";
-            }
+            // 抓取公共藝術(artwork)和宗教場所(place_of_worship)
+            const overpassQuery = `[out:json][timeout:20];(node["tourism"="artwork"](${bbox});node["amenity"="place_of_worship"](${bbox}););out body 80;`;
+            const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`;
+
+            // 4. 發送請求抓取據點
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('spot-list').innerHTML = ''; // 清空讀取中
+                    
+                    if (!data.elements || data.elements.length === 0) {
+                        document.getElementById('spot-list').innerHTML = '<li>附近 10 公里內沒有找到符合的 OSM 據點。</li>';
+                        return;
+                    }
+
+                    // 5. 把撈到的點通通在地圖上畫出來
+                    data.elements.forEach(spot => {
+                        const sLat = spot.lat;
+                        const sLng = spot.lon;
+                        const sName = spot.tags.name || "未命名據點(彩繪牆/變電箱/地標)";
+
+                        // 計算實際球面距離
+                        const dist = calculateDistance(uLat, uLng, sLat, sLng);
+
+                        // 雙重保險：嚴格確認在 10 公里內才秀出來
+                        if (dist <= 10.0) {
+                            // 地圖插針
+                            L.marker([sLat, sLng]).addTo(map)
+                                .bindPopup(`<b>📍 ${sName}</b><br>距離：${dist.toFixed(2)} 公里<br><small style="color:gray;">潛在蘑菇生長點</small>`);
+
+                            // 更新網頁下方的文字列表
+                            const listHtml = `<li><strong>${sName}</strong> (距離: ${dist.toFixed(2)} 公里)</li>`;
+                            document.getElementById('spot-list').innerHTML += listHtml;
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("❌ 偵測出錯:", error);
+                    document.getElementById('spot-list').innerHTML = '<li>⚠️ 雷達連線超時，請重新整理網頁再試一次。</li>';
+                });
         }
 
-        // 5. 數學公式：計算兩組經緯度之間的實際距離 (單位: 公里)
-        function getDistance(lat1, lon1, lat2, lon2) {
+        function onError(error) {
+            alert("無法取得你的 GPS 定位，請確認網頁是否有允許定位權限。");
+            document.getElementById('spot-list').innerHTML = '<li>❌ 定位失敗，請允許定位權限後重新整理。</li>';
+        }
+
+        // 地球球面距離計算公式 (Haversine Formula)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
             const R = 6371; // 地球半徑 (km)
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                       Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                      Math.sin(dLon/2) * Math.sin(dLon/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
             return R * c;
         }
-
-        function handleError(err) {
-            document.getElementById('status-text').innerText = "定位失敗，請確保手機已開啟內建 GPS 並允許網頁定位權限。";
-        }
-        // 當網頁抓到你的定位 (uLat, uLng) 後，自動組裝出一個給 OSM 的「查詢語法」
-const bbox = `${uLat - 0.05},${uLng - 0.05},${uLat + 0.05},${uLng + 0.05}`; // 算出方圓大約 10 公里的經緯度格子
-
-// 告訴 OSM：請把這個格子內，所有屬於「公共藝術、紀念碑、噴水池、宗教場所」的點通通交出來！
-const overpassQuery = `
-    [out:json][timeout:25];
-    (
-      node["tourism"="artwork"](${bbox});
-      node["historic"="monument"](${bbox});
-      node["amenity"="place_of_worship"](${bbox});
-    );
-    out body;
-`;
-
-// 網頁直接用 fetch 發送給全球公開伺服器
-fetch(`http://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`)
-  .then(response => response.json())
-  .then(data => {
-      // 網頁拿到成百上千個點位，全自動在地圖上插旗！
-      data.elements.forEach(spot => {
-          L.marker([spot.lat, spot.lon]).addTo(map).bindPopup(`<b>${spot.tags.name || '未命名據點'}</b>`);
-      });
-  });
-
     </script>
 </body>
 </html>
