@@ -77,9 +77,69 @@
         }
 
         // 4. 核心：處理定位並自動計算周圍蘑菇點
-        function processLocation(position) {
-            const uLat = position.coords.latitude;
-            const uLng = position.coords.longitude;
+        function onSuccess(position) {
+    const uLat = position.coords.latitude;
+    const uLng = position.coords.longitude;
+    
+    // 【測試點 1】看有沒有成功抓到手機定位
+    console.log("📍 定位成功！你的座標是:", uLat, uLng);
+
+    // 畫地圖與圓圈
+    map.setView([uLat, uLng], 12);
+    if (myCircle) map.removeLayer(myCircle);
+    myCircle = L.circle([uLat, uLng], { radius: 10000, color: '#e056fd', fillOpacity: 0.05 }).addTo(map);
+
+    document.getElementById('spot-list').innerHTML = '';
+
+    // 設定大約 10 公里的邊界
+    const delta = 0.09; 
+    const bbox = `${uLat - delta},${uLng - delta},${uLat + delta},${uLng + delta}`;
+
+    // 這次改用最簡單、絕對不會被伺服器拒絕的關鍵字（只抓土地公廟、宮廟等宗教場所）
+    const overpassQuery = `[out:json][timeout:15];node["amenity"="place_of_worship"](${bbox});out body 50;`;
+    const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`;
+
+    console.log("📡 正在發送請求到網址:", url);
+
+    // 【測試點 2】直接用 fetch 抓資料
+    fetch(url)
+        .then(response => {
+            console.log("📥 伺服器有回應了！狀態碼:", response.status);
+            return response.json();
+        })
+        .then(data => {
+            // 【測試點 3】看抓到了幾個點
+            console.log("🔍 伺服器回傳的原始資料點數:", data.elements ? data.elements.length : 0);
+            alert(`成功抓到 ${data.elements.length} 個點！`); // 直接彈出視窗
+
+            if (!data.elements || data.elements.length === 0) {
+                document.getElementById('spot-list').innerHTML = '<li>附近的宮廟據點數量為 0</li>';
+                return;
+            }
+
+            data.elements.forEach(spot => {
+                const sLat = spot.lat;
+                const sLng = spot.lon;
+                const sName = spot.tags.name || "未命名據點";
+
+                // 【關鍵卡點防線】強制先在地圖上畫出來，不管距離公式對不對！
+                L.marker([sLat, sLng]).addTo(map).bindPopup(`<b>📍 ${sName}</b>`);
+
+                // 計算距離
+                const dist = calculateDistance(uLat, uLng, sLat, sLng);
+                console.log(`點位: ${sName}, 計算距離: ${dist} 公里`);
+
+                const listHtml = `<li><strong>${sName}</strong> (距離: ${dist.toFixed(2)} 公里)</li>`;
+                document.getElementById('spot-list').innerHTML += listHtml;
+            });
+        })
+        .catch(error => {
+            // 【測試點 4】看是不是網路被擋
+            console.error("❌ 網路請求大爆炸，原因:", error);
+            alert("網路請求失敗，請看 F12 Console 錯誤訊息");
+        });
+}
+
             
             document.getElementById('status-text').innerText = `定位成功！當先座標: ${uLat.toFixed(4)}, ${uLng.toFixed(4)}`;
 
