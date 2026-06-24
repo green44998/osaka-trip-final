@@ -103,7 +103,7 @@
             globalMushroomDatabase.forEach(spot => {
                 const distance = getDistance(uLat, uLng, spot.lat, spot.lng);
                 
-                if (distance <= 0.5) { // 單位是公里
+                if (distance <= 10.0) { // 單位是公里
                     // 1. 在地圖上插上紅色蘑菇預期點的針
                     L.marker([spot.lat, spot.lng], {
                         icon: L.icon({
